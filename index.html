@@ -1,0 +1,891 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SUPPORT · Gestão</title>
+<link rel="icon" type="image/png" href="assets/icon-navy.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --navy:#0A1F3A;
+    --blue:#005199;
+    --ice:#CFE0F0;
+    --ice-soft:#EAF2FA;
+    --white:#FFFFFF;
+    --green:#1E8E5A;
+    --amber:#C77C10;
+    --red:#C0392B;
+    --gray-600:#5B6B7B;
+    --gray-300:#D7E0E8;
+    --radius:10px;
+    --shadow:0 2px 10px rgba(10,31,58,0.08);
+  }
+  *{box-sizing:border-box;}
+  body{margin:0;font-family:'Montserrat',Arial,sans-serif;background:#F5F8FB;color:var(--navy);}
+  ::-webkit-scrollbar{width:8px;height:8px;}
+  ::-webkit-scrollbar-thumb{background:var(--gray-300);border-radius:4px;}
+
+  /* ---------- SHELL ---------- */
+  .shell{display:flex;min-height:100vh;}
+  .sidebar{
+    width:236px;flex-shrink:0;background:linear-gradient(180deg,var(--navy) 0%, #0d2649 100%);
+    color:var(--white);display:flex;flex-direction:column;padding:22px 16px;position:relative;overflow:hidden;
+  }
+  .sidebar::after{
+    content:"";position:absolute;top:-40px;right:-60px;width:180px;height:180px;
+    background:linear-gradient(135deg, rgba(0,81,153,0.55), transparent 70%);
+    transform:rotate(20deg);pointer-events:none;
+  }
+  .brand{display:flex;align-items:center;gap:10px;margin-bottom:30px;position:relative;z-index:1;}
+  .brand-icon{height:34px;width:auto;flex-shrink:0;}
+  .brand-text{line-height:1.1;}
+  .brand-text b{display:block;font-size:15px;letter-spacing:.5px;}
+  .brand-text span{font-size:10px;color:var(--ice);letter-spacing:1px;text-transform:uppercase;}
+
+  nav{display:flex;flex-direction:column;gap:3px;position:relative;z-index:1;}
+  .nav-item{
+    display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:8px;cursor:pointer;
+    font-size:13.5px;font-weight:500;color:#C9D6E5;transition:.15s;
+  }
+  .nav-item:hover{background:rgba(255,255,255,0.06);color:var(--white);}
+  .nav-item.active{background:var(--blue);color:var(--white);}
+  .nav-item .dot{width:6px;height:6px;border-radius:50%;background:currentColor;opacity:.6;flex-shrink:0;}
+
+  .sidebar-footer{margin-top:auto;padding-top:16px;border-top:1px solid rgba(255,255,255,0.12);position:relative;z-index:1;}
+  .sidebar-footer p{font-size:10.5px;color:#93A6BC;line-height:1.5;margin:0;}
+
+  .main{flex:1;min-width:0;padding:26px 34px 50px;}
+  .topbar{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:24px;gap:20px;flex-wrap:wrap;}
+  .topbar h1{margin:0 0 4px;font-size:22px;font-weight:800;}
+  .topbar p{margin:0;color:var(--gray-600);font-size:13px;}
+  .today-pill{background:var(--white);border:1px solid var(--gray-300);border-radius:999px;padding:8px 16px;font-size:12.5px;color:var(--navy);font-weight:600;box-shadow:var(--shadow);white-space:nowrap;}
+
+  /* ---------- CARDS / GENERIC ---------- */
+  .card{background:var(--white);border-radius:var(--radius);box-shadow:var(--shadow);border:1px solid #EAF0F6;}
+  .section-title{font-size:15px;font-weight:700;margin:0 0 14px;display:flex;align-items:center;gap:8px;}
+  .section-title .bar{width:4px;height:16px;background:var(--blue);border-radius:2px;display:inline-block;}
+  .btn{
+    border:none;border-radius:8px;padding:9px 16px;font-family:inherit;font-weight:600;font-size:12.5px;
+    cursor:pointer;transition:.15s;display:inline-flex;align-items:center;gap:6px;
+  }
+  .btn-primary{background:var(--blue);color:#fff;}
+  .btn-primary:hover{background:#003f78;}
+  .btn-primary:disabled{background:var(--gray-300);cursor:not-allowed;}
+  .btn-ghost{background:var(--ice-soft);color:var(--blue);}
+  .btn-ghost:hover{background:var(--ice);}
+  .btn-danger{background:#FBEAEA;color:var(--red);}
+  .btn-danger:hover{background:#F5D5D3;}
+  input,select,textarea{
+    font-family:inherit;border:1px solid var(--gray-300);border-radius:7px;padding:9px 11px;font-size:13px;
+    background:#fff;color:var(--navy);width:100%;
+  }
+  input:focus,select:focus,textarea:focus{outline:none;border-color:var(--blue);box-shadow:0 0 0 3px rgba(0,81,153,0.12);}
+  label{font-size:11.5px;font-weight:600;color:var(--gray-600);text-transform:uppercase;letter-spacing:.4px;margin-bottom:5px;display:block;}
+  .field{margin-bottom:12px;}
+  .grid-2{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+  .grid-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;}
+
+  .badge{display:inline-flex;align-items:center;padding:3px 10px;border-radius:999px;font-size:11px;font-weight:700;letter-spacing:.2px;}
+  .badge-green{background:#E4F5EC;color:var(--green);}
+  .badge-amber{background:#FBF0DE;color:var(--amber);}
+  .badge-red{background:#FBEAEA;color:var(--red);}
+  .badge-blue{background:var(--ice-soft);color:var(--blue);}
+  .badge-gray{background:#EEF1F4;color:var(--gray-600);}
+
+  /* ---------- DASHBOARD ---------- */
+  .kpi-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:26px;}
+  .kpi{padding:18px 18px;position:relative;overflow:hidden;}
+  .kpi .label{font-size:11.5px;color:var(--gray-600);font-weight:600;text-transform:uppercase;letter-spacing:.4px;}
+  .kpi .value{font-size:28px;font-weight:800;margin-top:6px;color:var(--navy);}
+  .kpi .sub{font-size:11.5px;color:var(--gray-600);margin-top:4px;}
+  .kpi::before{content:"";position:absolute;right:-18px;top:-18px;width:70px;height:70px;border-radius:50%;background:var(--ice-soft);}
+  .clickable-card{cursor:pointer;transition:.15s;}
+  .clickable-card:hover{box-shadow:0 6px 18px rgba(10,31,58,0.14);transform:translateY(-2px);border-color:var(--blue);}
+  .panel.clickable-card .section-title{color:var(--navy);}
+  .panel.clickable-card:hover .section-title{color:var(--blue);}
+
+  .dash-grid{display:grid;grid-template-columns:1.3fr 1fr;gap:18px;}
+  .panel{padding:18px 20px;margin-bottom:18px;}
+  .list-row{display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px solid #F0F3F7;font-size:13px;}
+  .list-row:last-child{border-bottom:none;}
+  .list-row .meta{color:var(--gray-600);font-size:12px;}
+
+  /* ---------- CLIENTES ---------- */
+  .client-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:16px;}
+  .client-card{padding:18px;position:relative;}
+  .client-card h3{margin:0 0 3px;font-size:15.5px;}
+  .client-card .sindica{font-size:12px;color:var(--gray-600);margin-bottom:10px;}
+  .client-card .addr{font-size:12px;color:var(--gray-600);margin-bottom:12px;line-height:1.4;}
+  .client-card .row{display:flex;justify-content:space-between;align-items:center;margin-top:8px;}
+  .client-card .tags{display:flex;gap:6px;flex-wrap:wrap;margin-top:10px;}
+  .icon-btn{background:none;border:none;color:var(--gray-600);cursor:pointer;font-size:13px;padding:2px;}
+  .icon-btn:hover{color:var(--red);}
+
+  /* ---------- CONTRATOS ---------- */
+  .contrato-card{padding:18px;position:relative;}
+  .contrato-card h3{margin:0 0 8px;font-size:15px;}
+  .contrato-card .meta-row{font-size:12px;color:var(--gray-600);margin-bottom:4px;}
+  .contrato-card .row{display:flex;justify-content:space-between;align-items:center;margin-top:12px;}
+
+  /* ---------- FUNCIONÁRIOS ---------- */
+  .emp-table{width:100%;border-collapse:collapse;font-size:12.8px;}
+  .emp-table th{text-align:left;color:var(--gray-600);font-weight:700;text-transform:uppercase;font-size:10.5px;letter-spacing:.4px;padding:8px 10px;border-bottom:2px solid var(--gray-300);}
+  .emp-table td{padding:11px 10px;border-bottom:1px solid #F0F3F7;vertical-align:middle;}
+  .emp-table tr:hover td{background:#FAFCFE;}
+  .stepper{display:flex;gap:3px;align-items:center;}
+  .step{width:20px;height:6px;border-radius:3px;background:var(--gray-300);}
+  .step.done{background:var(--green);}
+  .step.current{background:var(--amber);}
+
+  /* ---------- SUPERVISÃO ---------- */
+  .visit-card{padding:14px 16px;display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;}
+  .visit-date{width:56px;text-align:center;flex-shrink:0;}
+  .visit-date .d{font-size:19px;font-weight:800;line-height:1;}
+  .visit-date .m{font-size:10px;color:var(--gray-600);text-transform:uppercase;font-weight:700;}
+  .visit-info{flex:1;padding:0 14px;}
+  .visit-info b{font-size:13.5px;}
+  .visit-info .meta{font-size:11.5px;color:var(--gray-600);margin-top:2px;}
+
+  /* ---------- FINANCEIRO ---------- */
+  .fin-summary{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px;margin-bottom:18px;}
+  .fin-table{width:100%;border-collapse:collapse;font-size:12.8px;}
+  .fin-table th{text-align:left;color:var(--gray-600);font-weight:700;text-transform:uppercase;font-size:10.5px;letter-spacing:.4px;padding:8px 10px;border-bottom:2px solid var(--gray-300);}
+  .fin-table td{padding:10px;border-bottom:1px solid #F0F3F7;}
+  .amount-in{color:var(--green);font-weight:700;}
+  .amount-out{color:var(--red);font-weight:700;}
+
+  /* ---------- MODAL ---------- */
+  .overlay{position:fixed;inset:0;background:rgba(10,31,58,0.45);display:none;align-items:center;justify-content:center;z-index:50;padding:20px;}
+  .overlay.open{display:flex;}
+  .modal{background:#fff;border-radius:14px;width:100%;max-width:480px;max-height:88vh;overflow-y:auto;padding:24px 26px;box-shadow:0 20px 50px rgba(10,31,58,0.3);}
+  .modal h2{margin:0 0 18px;font-size:17px;font-weight:800;display:flex;align-items:center;gap:8px;}
+  .modal-actions{display:flex;gap:10px;margin-top:18px;justify-content:flex-end;}
+  .empty{text-align:center;padding:40px 20px;color:var(--gray-600);}
+  .empty .big{font-size:32px;margin-bottom:8px;}
+  .fab-row{display:flex;justify-content:flex-end;margin-bottom:14px;}
+
+  .tab-view{display:none;}
+  .tab-view.active{display:block;}
+
+  #toast{
+    position:fixed;bottom:20px;right:20px;background:var(--navy);color:#fff;padding:12px 18px;
+    border-radius:8px;font-size:13px;font-weight:600;box-shadow:0 8px 24px rgba(10,31,58,0.25);
+    opacity:0;transform:translateY(10px);transition:.25s;pointer-events:none;z-index:100;
+  }
+  #toast.show{opacity:1;transform:translateY(0);}
+  #toast.err{background:var(--red);}
+
+  #bootError{display:none;background:#FBEAEA;border:1px solid #F0C6C2;color:var(--red);padding:14px 18px;border-radius:10px;font-size:13px;margin-bottom:20px;}
+
+  @media(max-width:1000px){
+    .kpi-grid{grid-template-columns:repeat(2,1fr);}
+    .dash-grid{grid-template-columns:1fr;}
+    .fin-summary{grid-template-columns:1fr;}
+    .sidebar{width:78px;}
+    .brand-text,.nav-item span.label-text{display:none;}
+    .main{padding:20px;}
+  }
+</style>
+</head>
+<body>
+
+<div class="shell">
+  <aside class="sidebar">
+    <div class="brand">
+      <img src="assets/icon-white.png" alt="SUPPORT" class="brand-icon">
+      <div class="brand-text">
+        <b>SUPPORT</b>
+        <span>Terceirizações</span>
+      </div>
+    </div>
+    <nav id="nav">
+      <div class="nav-item active" data-tab="dashboard"><span class="dot"></span><span class="label-text">Dashboard</span></div>
+      <div class="nav-item" data-tab="clientes"><span class="dot"></span><span class="label-text">Clientes</span></div>
+      <div class="nav-item" data-tab="contratos"><span class="dot"></span><span class="label-text">Contratos</span></div>
+      <div class="nav-item" data-tab="funcionarios"><span class="dot"></span><span class="label-text">Funcionários</span></div>
+      <div class="nav-item" data-tab="supervisao"><span class="dot"></span><span class="label-text">Supervisão</span></div>
+      <div class="nav-item" data-tab="financeiro"><span class="dot"></span><span class="label-text">Financeiro</span></div>
+    </nav>
+    <div class="sidebar-footer">
+      <p>Compromisso · Respeito · Confiança<br>Dados salvos no backend (Netlify Blobs).</p>
+    </div>
+  </aside>
+
+  <main class="main">
+
+    <div id="bootError"></div>
+
+    <!-- DASHBOARD -->
+    <div class="tab-view active" id="view-dashboard">
+      <div class="topbar">
+        <div><h1>Visão geral</h1><p>Panorama das operações da SUPPORT em tempo real.</p></div>
+        <div class="today-pill" id="todayPill"></div>
+      </div>
+
+      <div class="kpi-grid" id="kpiGrid"></div>
+
+      <div class="dash-grid">
+        <div>
+          <div class="card panel clickable-card" onclick="goToTab('supervisao')">
+            <div class="section-title"><span class="bar"></span>Próximas visitas de supervisão</div>
+            <div id="dashVisitas"></div>
+          </div>
+          <div class="card panel clickable-card" onclick="goToTab('funcionarios')">
+            <div class="section-title"><span class="bar"></span>Admissões em andamento</div>
+            <div id="dashAdmissoes"></div>
+          </div>
+        </div>
+        <div>
+          <div class="card panel clickable-card" onclick="goToTab('contratos')">
+            <div class="section-title"><span class="bar"></span>Contratos pendentes</div>
+            <div id="dashContratos"></div>
+          </div>
+          <div class="card panel clickable-card" onclick="goToTab('financeiro')">
+            <div class="section-title"><span class="bar"></span>Financeiro do mês</div>
+            <div id="dashFinanceiro"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- CLIENTES -->
+    <div class="tab-view" id="view-clientes">
+      <div class="topbar">
+        <div><h1>Clientes</h1><p>Condomínios atendidos pela SUPPORT.</p></div>
+      </div>
+      <div class="fab-row"><button class="btn btn-primary" onclick="openClienteModal()">+ Novo cliente</button></div>
+      <div class="client-grid" id="clienteGrid"></div>
+    </div>
+
+    <!-- CONTRATOS -->
+    <div class="tab-view" id="view-contratos">
+      <div class="topbar">
+        <div><h1>Contratos</h1><p>Situação contratual de cada cliente.</p></div>
+      </div>
+      <div class="fab-row"><button class="btn btn-primary" onclick="openContratoModal()">+ Novo contrato</button></div>
+      <div class="client-grid" id="contratoGrid"></div>
+    </div>
+
+    <!-- FUNCIONARIOS -->
+    <div class="tab-view" id="view-funcionarios">
+      <div class="topbar">
+        <div><h1>Funcionários</h1><p>Equipe alocada e fluxo de admissão.</p></div>
+      </div>
+      <div class="fab-row"><button class="btn btn-primary" onclick="openFuncModal()">+ Novo funcionário</button></div>
+      <div class="card" style="padding:6px 18px 18px;overflow-x:auto;">
+        <table class="emp-table" id="funcTable"></table>
+      </div>
+    </div>
+
+    <!-- SUPERVISAO -->
+    <div class="tab-view" id="view-supervisao">
+      <div class="topbar">
+        <div><h1>Supervisão</h1><p>Visitas de acompanhamento — terças e quintas à tarde.</p></div>
+      </div>
+      <div class="fab-row"><button class="btn btn-primary" onclick="openVisitaModal()">+ Agendar visita</button></div>
+      <div id="visitaList"></div>
+    </div>
+
+    <!-- FINANCEIRO -->
+    <div class="tab-view" id="view-financeiro">
+      <div class="topbar">
+        <div><h1>Financeiro</h1><p>Receitas e despesas resumidas.</p></div>
+      </div>
+      <div class="fin-summary" id="finSummary"></div>
+      <div class="fab-row"><button class="btn btn-primary" onclick="openFinModal()">+ Novo lançamento</button></div>
+      <div class="card" style="padding:6px 18px 18px;overflow-x:auto;">
+        <table class="fin-table" id="finTable"></table>
+      </div>
+    </div>
+
+  </main>
+</div>
+
+<!-- MODALS -->
+<div class="overlay" id="modalCliente">
+  <div class="modal">
+    <h2>🏢 Novo cliente</h2>
+    <div class="field"><label>Nome do condomínio</label><input id="c_nome" placeholder="Ed. Exemplo"></div>
+    <div class="field"><label>Síndica(o)</label><input id="c_sindica" placeholder="Nome"></div>
+    <div class="field"><label>Endereço</label><input id="c_endereco" placeholder="Rua, número, bairro"></div>
+    <div class="modal-actions">
+      <button class="btn btn-ghost" onclick="closeModal('modalCliente')">Cancelar</button>
+      <button class="btn btn-primary" id="c_saveBtn" onclick="saveCliente()">Salvar</button>
+    </div>
+  </div>
+</div>
+
+<div class="overlay" id="modalContrato">
+  <div class="modal">
+    <h2>📄 Novo contrato</h2>
+    <div class="field"><label>Cliente</label><select id="ct_cliente"></select></div>
+    <div class="grid-2">
+      <div class="field"><label>Status</label>
+        <select id="ct_status"><option>Rascunho</option><option>Enviado</option><option selected>Assinado</option></select>
+      </div>
+      <div class="field"><label>Plataforma</label>
+        <select id="ct_plataforma"><option>Clicksign</option><option>D4Sign</option></select>
+      </div>
+    </div>
+    <div class="grid-2">
+      <div class="field"><label>Data de envio</label><input id="ct_dataEnvio" type="date"></div>
+      <div class="field"><label>Data de assinatura</label><input id="ct_dataAssinatura" type="date"></div>
+    </div>
+    <div class="field"><label>Link do documento</label><input id="ct_link" placeholder="https://..."></div>
+    <div class="modal-actions">
+      <button class="btn btn-ghost" onclick="closeModal('modalContrato')">Cancelar</button>
+      <button class="btn btn-primary" id="ct_saveBtn" onclick="saveContrato()">Salvar</button>
+    </div>
+  </div>
+</div>
+
+<div class="overlay" id="modalFunc">
+  <div class="modal">
+    <h2>👷 Novo funcionário</h2>
+    <div class="field"><label>Nome</label><input id="f_nome" placeholder="Nome completo"></div>
+    <div class="grid-2">
+      <div class="field"><label>Cargo</label>
+        <select id="f_cargo"><option>Zelador</option><option>ASG</option><option>Porteiro</option><option>Faxineira</option></select>
+      </div>
+      <div class="field"><label>Condomínio</label><select id="f_condominio"></select></div>
+    </div>
+    <div class="grid-2">
+      <div class="field"><label>Folga fixa</label>
+        <select id="f_folga"><option>Segunda</option><option>Terça</option><option selected>Quarta</option><option>Quinta</option><option>Sexta</option><option>Sábado</option><option>Domingo</option></select>
+      </div>
+      <div class="field"><label>Etapa de admissão</label>
+        <select id="f_etapa">
+          <option value="0">Documentos</option>
+          <option value="1">Contabilidade</option>
+          <option value="2">ASO</option>
+          <option value="3">Reunião</option>
+          <option value="4">Drive</option>
+          <option value="5" selected>Tique Taque (concluído)</option>
+        </select>
+      </div>
+    </div>
+    <div class="modal-actions">
+      <button class="btn btn-ghost" onclick="closeModal('modalFunc')">Cancelar</button>
+      <button class="btn btn-primary" id="f_saveBtn" onclick="saveFunc()">Salvar</button>
+    </div>
+  </div>
+</div>
+
+<div class="overlay" id="modalVisita">
+  <div class="modal">
+    <h2>📋 Agendar visita</h2>
+    <div class="grid-2">
+      <div class="field"><label>Data</label><input id="v_data" type="date"></div>
+      <div class="field"><label>Condomínio</label><select id="v_condominio"></select></div>
+    </div>
+    <div class="field"><label>Responsável</label><input id="v_responsavel" placeholder="Nome" value="Alexandre"></div>
+    <div class="field"><label>Status</label>
+      <select id="v_status"><option>Pendente</option><option>Realizada</option></select>
+    </div>
+    <div class="field"><label>Observações</label><textarea id="v_obs" rows="3" placeholder="Pontos verificados, pendências..."></textarea></div>
+    <div class="modal-actions">
+      <button class="btn btn-ghost" onclick="closeModal('modalVisita')">Cancelar</button>
+      <button class="btn btn-primary" id="v_saveBtn" onclick="saveVisita()">Salvar</button>
+    </div>
+  </div>
+</div>
+
+<div class="overlay" id="modalFin">
+  <div class="modal">
+    <h2>💰 Novo lançamento</h2>
+    <div class="grid-2">
+      <div class="field"><label>Tipo</label><select id="ff_tipo"><option>Receita</option><option>Despesa</option></select></div>
+      <div class="field"><label>Data</label><input id="ff_data" type="date"></div>
+    </div>
+    <div class="field"><label>Categoria</label><input id="ff_categoria" placeholder="Ex: Folha, Mensalidade cliente, EPI..."></div>
+    <div class="grid-2">
+      <div class="field"><label>Valor (R$)</label><input id="ff_valor" type="number" step="0.01" placeholder="0,00"></div>
+      <div class="field"><label>Condomínio relacionado</label><select id="ff_condominio"><option value="">—</option></select></div>
+    </div>
+    <div class="modal-actions">
+      <button class="btn btn-ghost" onclick="closeModal('modalFin')">Cancelar</button>
+      <button class="btn btn-primary" id="ff_saveBtn" onclick="saveFin()">Salvar</button>
+    </div>
+  </div>
+</div>
+
+<div id="toast"></div>
+
+<script>
+/* ========================= API LAYER ========================= */
+function api(resource){
+  return {
+    list: () => fetch(`/api/${resource}`).then(r=>{ if(!r.ok) throw new Error('Falha ao carregar '+resource); return r.json(); }),
+    create: (body) => fetch(`/api/${resource}`, { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(body) }).then(r=>{ if(!r.ok) throw new Error('Falha ao salvar'); return r.json(); }),
+    update: (id, body) => fetch(`/api/${resource}?id=${id}`, { method:'PUT', headers:{'Content-Type':'application/json'}, body: JSON.stringify(body) }).then(r=>{ if(!r.ok) throw new Error('Falha ao atualizar'); return r.json(); }),
+    remove: (id) => fetch(`/api/${resource}?id=${id}`, { method:'DELETE' }).then(r=>{ if(!r.ok) throw new Error('Falha ao remover'); return r.json(); }),
+  };
+}
+
+let state = { clientes: [], contratos: [], funcionarios: [], visitas: [], financeiro: [] };
+
+function toast(msg, isErr){
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.className = isErr ? 'show err' : 'show';
+  setTimeout(()=>{ t.className=''; }, 2600);
+}
+
+/* ========================= BOOT / SEED ========================= */
+const seedClientes = [
+  { nome:'Ed. MYLENA', sindica:'Letícia', endereco:'Praia Grande/SP' }
+];
+const seedContratosFor = (clienteNome, clienteId) => ({
+  clienteNome, clienteId, status:'Assinado', plataforma:'Clicksign', dataEnvio:'', dataAssinatura:'', link:''
+});
+const seedFuncionariosFor = (clienteNome) => ([
+  { nome:'Evandro', cargo:'Zelador', condominioNome:clienteNome, folga:'Quarta', etapa:5 },
+  { nome:'Julhyana', cargo:'ASG', condominioNome:clienteNome, folga:'Terça', etapa:5 }
+]);
+
+async function loadState(){
+  try{
+    const [clientes, contratos, funcionarios, visitas, financeiro] = await Promise.all([
+      api('clientes').list(), api('contratos').list(), api('funcionarios').list(), api('visitas').list(), api('financeiro').list()
+    ]);
+    state = { clientes, contratos, funcionarios, visitas, financeiro };
+
+    if(state.clientes.length === 0){
+      // primeira execução: popular com os dados já conhecidos da operação
+      const created = await api('clientes').create(seedClientes[0]);
+      state.clientes.push(created);
+      const contrato = await api('contratos').create(seedContratosFor(created.nome, created.id));
+      state.contratos.push(contrato);
+      for(const f of seedFuncionariosFor(created.nome)){
+        const cf = await api('funcionarios').create(f);
+        state.funcionarios.push(cf);
+      }
+    }
+    document.getElementById('bootError').style.display = 'none';
+  }catch(e){
+    const box = document.getElementById('bootError');
+    box.style.display = 'block';
+    box.innerHTML = `<b>Não foi possível conectar à API.</b><br>Isso é esperado se você estiver abrindo este arquivo direto no navegador — o backend (Netlify Functions) só funciona quando o site está publicado no Netlify (ou rodando via <code>netlify dev</code> localmente). Veja o README do projeto para o passo a passo de deploy.`;
+    console.error(e);
+  }
+  renderAll();
+}
+
+/* ========================= NAV ========================= */
+function goToTab(tab){
+  document.querySelectorAll('.nav-item').forEach(n=>n.classList.toggle('active', n.dataset.tab===tab));
+  document.querySelectorAll('.tab-view').forEach(v=>v.classList.remove('active'));
+  document.getElementById('view-'+tab).classList.add('active');
+  window.scrollTo({top:0, behavior:'smooth'});
+}
+document.getElementById('nav').addEventListener('click', (e)=>{
+  const item = e.target.closest('.nav-item');
+  if(!item) return;
+  goToTab(item.dataset.tab);
+});
+
+function closeModal(id){ document.getElementById(id).classList.remove('open'); }
+function openModal(id){ document.getElementById(id).classList.add('open'); }
+function setBusy(btnId, busy, labelBusy, labelIdle){
+  const b = document.getElementById(btnId);
+  b.disabled = busy;
+  b.textContent = busy ? labelBusy : labelIdle;
+}
+
+/* ========================= TOP BAR DATE ========================= */
+document.getElementById('todayPill').textContent = new Date().toLocaleDateString('pt-BR',{weekday:'long', day:'2-digit', month:'long'});
+
+/* ========================= CLIENTES ========================= */
+function openClienteModal(){
+  document.getElementById('c_nome').value='';
+  document.getElementById('c_sindica').value='';
+  document.getElementById('c_endereco').value='';
+  openModal('modalCliente');
+}
+async function saveCliente(){
+  const nome = document.getElementById('c_nome').value.trim();
+  if(!nome){ alert('Informe o nome do condomínio.'); return; }
+  setBusy('c_saveBtn', true, 'Salvando...', 'Salvar');
+  try{
+    const created = await api('clientes').create({
+      nome,
+      sindica: document.getElementById('c_sindica').value.trim(),
+      endereco: document.getElementById('c_endereco').value.trim()
+    });
+    state.clientes.push(created);
+    closeModal('modalCliente'); renderAll();
+    toast('Cliente salvo.');
+  }catch(e){ toast('Erro ao salvar cliente.', true); }
+  setBusy('c_saveBtn', false, 'Salvando...', 'Salvar');
+}
+async function deleteCliente(id){
+  if(!confirm('Remover este cliente?')) return;
+  try{
+    await api('clientes').remove(id);
+    state.clientes = state.clientes.filter(c=>c.id!==id);
+    renderAll(); toast('Cliente removido.');
+  }catch(e){ toast('Erro ao remover cliente.', true); }
+}
+function statusBadge(status){
+  const map = {Assinado:'badge-green', Enviado:'badge-amber', Rascunho:'badge-gray'};
+  return `<span class="badge ${map[status]||'badge-gray'}">${status||'Sem contrato'}</span>`;
+}
+function contratoDoCliente(clienteId, clienteNome){
+  return state.contratos.find(c => c.clienteId===clienteId || c.clienteNome===clienteNome);
+}
+function renderClientes(){
+  const grid = document.getElementById('clienteGrid');
+  if(state.clientes.length===0){
+    grid.innerHTML = `<div class="empty" style="grid-column:1/-1"><div class="big">🏢</div>Nenhum cliente cadastrado ainda.<br>Clique em "Novo cliente" para começar.</div>`;
+    return;
+  }
+  grid.innerHTML = state.clientes.map(c=>{
+    const nFunc = state.funcionarios.filter(f=>f.condominioNome===c.nome).length;
+    const contrato = contratoDoCliente(c.id, c.nome);
+    return `
+    <div class="card client-card">
+      <button class="icon-btn" style="position:absolute;top:14px;right:14px" onclick="deleteCliente('${c.id}')">✕</button>
+      <h3>${c.nome}</h3>
+      <div class="sindica">Síndica(o): ${c.sindica||'—'}</div>
+      <div class="addr">${c.endereco||'Endereço não informado'}</div>
+      <div class="row">
+        ${statusBadge(contrato ? contrato.status : null)}
+        <span class="badge badge-blue">${nFunc} funcionário(s)</span>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+/* ========================= CONTRATOS ========================= */
+function openContratoModal(){
+  fillCondominioSelects();
+  document.getElementById('ct_dataEnvio').value='';
+  document.getElementById('ct_dataAssinatura').value='';
+  document.getElementById('ct_link').value='';
+  openModal('modalContrato');
+}
+async function saveContrato(){
+  const sel = document.getElementById('ct_cliente');
+  const clienteNome = sel.value;
+  if(!clienteNome){ alert('Cadastre um cliente antes de criar o contrato.'); return; }
+  const cliente = state.clientes.find(c=>c.nome===clienteNome);
+  setBusy('ct_saveBtn', true, 'Salvando...', 'Salvar');
+  try{
+    const created = await api('contratos').create({
+      clienteNome, clienteId: cliente ? cliente.id : null,
+      status: document.getElementById('ct_status').value,
+      plataforma: document.getElementById('ct_plataforma').value,
+      dataEnvio: document.getElementById('ct_dataEnvio').value,
+      dataAssinatura: document.getElementById('ct_dataAssinatura').value,
+      link: document.getElementById('ct_link').value.trim()
+    });
+    state.contratos.push(created);
+    closeModal('modalContrato'); renderAll();
+    toast('Contrato salvo.');
+  }catch(e){ toast('Erro ao salvar contrato.', true); }
+  setBusy('ct_saveBtn', false, 'Salvando...', 'Salvar');
+}
+async function deleteContrato(id){
+  if(!confirm('Remover este contrato?')) return;
+  try{
+    await api('contratos').remove(id);
+    state.contratos = state.contratos.filter(c=>c.id!==id);
+    renderAll(); toast('Contrato removido.');
+  }catch(e){ toast('Erro ao remover contrato.', true); }
+}
+function renderContratos(){
+  const grid = document.getElementById('contratoGrid');
+  if(state.contratos.length===0){
+    grid.innerHTML = `<div class="empty" style="grid-column:1/-1"><div class="big">📄</div>Nenhum contrato cadastrado ainda.</div>`;
+    return;
+  }
+  grid.innerHTML = state.contratos.map(c=>`
+    <div class="card contrato-card">
+      <button class="icon-btn" style="position:absolute;top:14px;right:14px" onclick="deleteContrato('${c.id}')">✕</button>
+      <h3>${c.clienteNome}</h3>
+      <div class="meta-row">Plataforma: ${c.plataforma}</div>
+      <div class="meta-row">Envio: ${c.dataEnvio ? new Date(c.dataEnvio+'T12:00:00').toLocaleDateString('pt-BR') : '—'}</div>
+      <div class="meta-row">Assinatura: ${c.dataAssinatura ? new Date(c.dataAssinatura+'T12:00:00').toLocaleDateString('pt-BR') : '—'}</div>
+      <div class="row">
+        ${statusBadge(c.status)}
+        ${c.link ? `<a href="${c.link}" target="_blank" class="btn btn-ghost" style="text-decoration:none">Abrir documento</a>` : ''}
+      </div>
+    </div>`).join('');
+}
+
+/* ========================= FUNCIONARIOS ========================= */
+const etapas = ['Documentos','Contabilidade','ASO','Reunião','Drive','Tique Taque'];
+function fillCondominioSelects(){
+  const opts = state.clientes.map(c=>`<option value="${c.nome}">${c.nome}</option>`).join('');
+  ['f_condominio','v_condominio','ct_cliente'].forEach(id=>{ document.getElementById(id).innerHTML = opts || '<option value="">Nenhum cliente cadastrado</option>'; });
+  document.getElementById('ff_condominio').innerHTML = '<option value="">—</option>' + opts;
+}
+function openFuncModal(){
+  fillCondominioSelects();
+  document.getElementById('f_nome').value='';
+  openModal('modalFunc');
+}
+async function saveFunc(){
+  const nome = document.getElementById('f_nome').value.trim();
+  if(!nome){ alert('Informe o nome do funcionário.'); return; }
+  setBusy('f_saveBtn', true, 'Salvando...', 'Salvar');
+  try{
+    const created = await api('funcionarios').create({
+      nome,
+      cargo: document.getElementById('f_cargo').value,
+      condominioNome: document.getElementById('f_condominio').value,
+      folga: document.getElementById('f_folga').value,
+      etapa: parseInt(document.getElementById('f_etapa').value)
+    });
+    state.funcionarios.push(created);
+    closeModal('modalFunc'); renderAll();
+    toast('Funcionário salvo.');
+  }catch(e){ toast('Erro ao salvar funcionário.', true); }
+  setBusy('f_saveBtn', false, 'Salvando...', 'Salvar');
+}
+async function deleteFunc(id){
+  if(!confirm('Remover este funcionário?')) return;
+  try{
+    await api('funcionarios').remove(id);
+    state.funcionarios = state.funcionarios.filter(f=>f.id!==id);
+    renderAll(); toast('Funcionário removido.');
+  }catch(e){ toast('Erro ao remover funcionário.', true); }
+}
+async function advanceEtapa(id){
+  const f = state.funcionarios.find(x=>x.id===id);
+  if(!f || f.etapa >= 5) return;
+  const novaEtapa = f.etapa + 1;
+  try{
+    const updated = await api('funcionarios').update(id, { etapa: novaEtapa });
+    Object.assign(f, updated);
+    renderAll();
+  }catch(e){ toast('Erro ao atualizar etapa.', true); }
+}
+function stepperHtml(etapa){
+  let html = '<div class="stepper">';
+  for(let i=0;i<6;i++){
+    let cls = 'step';
+    if(i<etapa) cls+=' done'; else if(i===etapa) cls+=' current';
+    html += `<div class="${cls}" title="${etapas[i]}"></div>`;
+  }
+  html += '</div>';
+  return html;
+}
+function renderFuncionarios(){
+  const table = document.getElementById('funcTable');
+  if(state.funcionarios.length===0){
+    table.innerHTML = `<tr><td class="empty"><div class="big">👷</div>Nenhum funcionário cadastrado ainda.</td></tr>`;
+    return;
+  }
+  table.innerHTML = `
+    <tr><th>Nome</th><th>Cargo</th><th>Condomínio</th><th>Folga</th><th>Admissão</th><th></th></tr>
+    ${state.funcionarios.map(f=>`
+      <tr>
+        <td><b>${f.nome}</b></td>
+        <td>${f.cargo}</td>
+        <td>${f.condominioNome||'—'}</td>
+        <td><span class="badge badge-blue">${f.folga}</span></td>
+        <td>
+          ${stepperHtml(f.etapa)}
+          <div style="font-size:10.5px;color:var(--gray-600);margin-top:3px">
+            ${f.etapa>=5?'Concluído':'Etapa: '+etapas[f.etapa]}
+          </div>
+        </td>
+        <td style="white-space:nowrap">
+          ${f.etapa<5?`<button class="icon-btn" style="color:var(--green)" onclick="advanceEtapa('${f.id}')" title="Avançar etapa">➜</button>`:''}
+          <button class="icon-btn" onclick="deleteFunc('${f.id}')" title="Remover">✕</button>
+        </td>
+      </tr>`).join('')}
+  `;
+}
+
+/* ========================= SUPERVISAO ========================= */
+function openVisitaModal(){
+  fillCondominioSelects();
+  document.getElementById('v_data').value = new Date().toISOString().slice(0,10);
+  document.getElementById('v_obs').value='';
+  openModal('modalVisita');
+}
+async function saveVisita(){
+  const data = document.getElementById('v_data').value;
+  if(!data){ alert('Informe a data.'); return; }
+  setBusy('v_saveBtn', true, 'Salvando...', 'Salvar');
+  try{
+    const created = await api('visitas').create({
+      data,
+      condominioNome: document.getElementById('v_condominio').value,
+      responsavel: document.getElementById('v_responsavel').value.trim(),
+      status: document.getElementById('v_status').value,
+      obs: document.getElementById('v_obs').value.trim()
+    });
+    state.visitas.push(created);
+    closeModal('modalVisita'); renderAll();
+    toast('Visita agendada.');
+  }catch(e){ toast('Erro ao agendar visita.', true); }
+  setBusy('v_saveBtn', false, 'Salvando...', 'Salvar');
+}
+async function toggleVisita(id){
+  const v = state.visitas.find(x=>x.id===id);
+  if(!v) return;
+  const novoStatus = v.status==='Pendente' ? 'Realizada' : 'Pendente';
+  try{
+    const updated = await api('visitas').update(id, { status: novoStatus });
+    Object.assign(v, updated);
+    renderAll();
+  }catch(e){ toast('Erro ao atualizar visita.', true); }
+}
+async function deleteVisita(id){
+  if(!confirm('Remover esta visita?')) return;
+  try{
+    await api('visitas').remove(id);
+    state.visitas = state.visitas.filter(v=>v.id!==id);
+    renderAll(); toast('Visita removida.');
+  }catch(e){ toast('Erro ao remover visita.', true); }
+}
+const monthsShort = ['JAN','FEV','MAR','ABR','MAI','JUN','JUL','AGO','SET','OUT','NOV','DEZ'];
+function renderSupervisao(){
+  const list = document.getElementById('visitaList');
+  const sorted = [...state.visitas].sort((a,b)=> a.data.localeCompare(b.data));
+  if(sorted.length===0){
+    list.innerHTML = `<div class="card empty"><div class="big">📋</div>Nenhuma visita agendada.<br>As visitas de supervisão acontecem às terças e quintas à tarde.</div>`;
+    return;
+  }
+  list.innerHTML = sorted.map(v=>{
+    const d = new Date(v.data+'T12:00:00');
+    return `
+    <div class="card visit-card">
+      <div class="visit-date">
+        <div class="d">${String(d.getDate()).padStart(2,'0')}</div>
+        <div class="m">${monthsShort[d.getMonth()]}</div>
+      </div>
+      <div class="visit-info">
+        <b>${v.condominioNome||'—'}</b>
+        <div class="meta">Responsável: ${v.responsavel||'—'}${v.obs? ' · '+v.obs:''}</div>
+      </div>
+      <div style="display:flex;align-items:center;gap:10px">
+        <span class="badge ${v.status==='Realizada'?'badge-green':'badge-amber'}" style="cursor:pointer" onclick="toggleVisita('${v.id}')">${v.status}</span>
+        <button class="icon-btn" onclick="deleteVisita('${v.id}')">✕</button>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+/* ========================= FINANCEIRO ========================= */
+function openFinModal(){
+  fillCondominioSelects();
+  document.getElementById('ff_data').value = new Date().toISOString().slice(0,10);
+  document.getElementById('ff_categoria').value='';
+  document.getElementById('ff_valor').value='';
+  openModal('modalFin');
+}
+async function saveFin(){
+  const valor = parseFloat(document.getElementById('ff_valor').value);
+  if(!valor || valor<=0){ alert('Informe um valor válido.'); return; }
+  setBusy('ff_saveBtn', true, 'Salvando...', 'Salvar');
+  try{
+    const created = await api('financeiro').create({
+      tipo: document.getElementById('ff_tipo').value,
+      data: document.getElementById('ff_data').value,
+      categoria: document.getElementById('ff_categoria').value.trim() || 'Sem categoria',
+      valor,
+      condominioNome: document.getElementById('ff_condominio').value
+    });
+    state.financeiro.push(created);
+    closeModal('modalFin'); renderAll();
+    toast('Lançamento salvo.');
+  }catch(e){ toast('Erro ao salvar lançamento.', true); }
+  setBusy('ff_saveBtn', false, 'Salvando...', 'Salvar');
+}
+async function deleteFin(id){
+  if(!confirm('Remover este lançamento?')) return;
+  try{
+    await api('financeiro').remove(id);
+    state.financeiro = state.financeiro.filter(f=>f.id!==id);
+    renderAll(); toast('Lançamento removido.');
+  }catch(e){ toast('Erro ao remover lançamento.', true); }
+}
+function brl(v){ return v.toLocaleString('pt-BR',{style:'currency',currency:'BRL'}); }
+function renderFinanceiro(){
+  const receitas = state.financeiro.filter(f=>f.tipo==='Receita').reduce((s,f)=>s+f.valor,0);
+  const despesas = state.financeiro.filter(f=>f.tipo==='Despesa').reduce((s,f)=>s+f.valor,0);
+  const saldo = receitas - despesas;
+  document.getElementById('finSummary').innerHTML = `
+    <div class="card kpi"><div class="label">Receitas</div><div class="value" style="color:var(--green)">${brl(receitas)}</div></div>
+    <div class="card kpi"><div class="label">Despesas</div><div class="value" style="color:var(--red)">${brl(despesas)}</div></div>
+    <div class="card kpi"><div class="label">Saldo</div><div class="value">${brl(saldo)}</div></div>
+  `;
+  const table = document.getElementById('finTable');
+  const sorted = [...state.financeiro].sort((a,b)=> b.data.localeCompare(a.data));
+  if(sorted.length===0){
+    table.innerHTML = `<tr><td class="empty"><div class="big">💰</div>Nenhum lançamento registrado ainda.</td></tr>`;
+    return;
+  }
+  table.innerHTML = `
+    <tr><th>Data</th><th>Categoria</th><th>Cliente</th><th>Tipo</th><th>Valor</th><th></th></tr>
+    ${sorted.map(f=>`
+      <tr>
+        <td>${new Date(f.data+'T12:00:00').toLocaleDateString('pt-BR')}</td>
+        <td>${f.categoria}</td>
+        <td>${f.condominioNome||'—'}</td>
+        <td><span class="badge ${f.tipo==='Receita'?'badge-green':'badge-red'}">${f.tipo}</span></td>
+        <td class="${f.tipo==='Receita'?'amount-in':'amount-out'}">${f.tipo==='Receita'?'+':'-'} ${brl(f.valor)}</td>
+        <td><button class="icon-btn" onclick="deleteFin('${f.id}')">✕</button></td>
+      </tr>`).join('')}
+  `;
+}
+
+/* ========================= DASHBOARD ========================= */
+function renderDashboard(){
+  const clientesAtivos = state.clientes.length;
+  const funcAtivos = state.funcionarios.length;
+  const visitasPendentes = state.visitas.filter(v=>v.status==='Pendente').length;
+  const receitas = state.financeiro.filter(f=>f.tipo==='Receita').reduce((s,f)=>s+f.valor,0);
+  const despesas = state.financeiro.filter(f=>f.tipo==='Despesa').reduce((s,f)=>s+f.valor,0);
+  const contratosPendentes = state.contratos.filter(c=>c.status!=='Assinado').length;
+
+  document.getElementById('kpiGrid').innerHTML = `
+    <div class="card kpi clickable-card" onclick="goToTab('clientes')"><div class="label">Clientes ativos</div><div class="value">${clientesAtivos}</div><div class="sub">Condomínios atendidos</div></div>
+    <div class="card kpi clickable-card" onclick="goToTab('funcionarios')"><div class="label">Funcionários</div><div class="value">${funcAtivos}</div><div class="sub">Alocados em campo</div></div>
+    <div class="card kpi clickable-card" onclick="goToTab('supervisao')"><div class="label">Visitas pendentes</div><div class="value">${visitasPendentes}</div><div class="sub">Aguardando supervisão</div></div>
+    <div class="card kpi clickable-card" onclick="goToTab('financeiro')"><div class="label">Saldo financeiro</div><div class="value">${brl(receitas-despesas)}</div><div class="sub">Receitas − despesas</div></div>
+  `;
+
+  const proxVisitas = [...state.visitas].filter(v=>v.status==='Pendente').sort((a,b)=>a.data.localeCompare(b.data)).slice(0,4);
+  document.getElementById('dashVisitas').innerHTML = proxVisitas.length ? proxVisitas.map(v=>`
+    <div class="list-row"><div><b>${v.condominioNome||'—'}</b><div class="meta">${new Date(v.data+'T12:00:00').toLocaleDateString('pt-BR')} · ${v.responsavel||'—'}</div></div><span class="badge badge-amber">Pendente</span></div>
+  `).join('') : `<p style="color:var(--gray-600);font-size:13px;margin:0">Nenhuma visita pendente.</p>`;
+
+  const admissoes = state.funcionarios.filter(f=>f.etapa<5);
+  document.getElementById('dashAdmissoes').innerHTML = admissoes.length ? admissoes.map(f=>`
+    <div class="list-row"><div><b>${f.nome}</b><div class="meta">${f.cargo} · ${f.condominioNome||'—'}</div></div><span class="badge badge-amber">${etapas[f.etapa]}</span></div>
+  `).join('') : `<p style="color:var(--gray-600);font-size:13px;margin:0">Todas as admissões concluídas.</p>`;
+
+  const pendentesContrato = state.contratos.filter(c=>c.status!=='Assinado');
+  document.getElementById('dashContratos').innerHTML = pendentesContrato.length ? pendentesContrato.map(c=>`
+    <div class="list-row"><div><b>${c.clienteNome}</b><div class="meta">${c.plataforma}</div></div>${statusBadge(c.status)}</div>
+  `).join('') : `<p style="color:var(--gray-600);font-size:13px;margin:0">Todos os contratos assinados.</p>`;
+
+  document.getElementById('dashFinanceiro').innerHTML = `
+    <div class="list-row"><div>Receitas</div><div class="amount-in">${brl(receitas)}</div></div>
+    <div class="list-row"><div>Despesas</div><div class="amount-out">${brl(despesas)}</div></div>
+    <div class="list-row"><div><b>Saldo</b></div><div><b>${brl(receitas-despesas)}</b></div></div>
+  `;
+}
+
+/* ========================= RENDER ALL ========================= */
+function renderAll(){
+  fillCondominioSelects();
+  renderDashboard();
+  renderClientes();
+  renderContratos();
+  renderFuncionarios();
+  renderSupervisao();
+  renderFinanceiro();
+}
+
+loadState();
+</script>
+</body>
+</html>
