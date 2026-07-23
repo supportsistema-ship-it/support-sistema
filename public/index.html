@@ -166,6 +166,16 @@
   .empty .big{font-size:32px;margin-bottom:8px;}
   .fab-row{display:flex;justify-content:flex-end;margin-bottom:14px;}
 
+  .attach-btn{background:var(--ice-soft);color:var(--blue);border:none;border-radius:7px;padding:5px 10px;font-size:11.5px;font-weight:600;cursor:pointer;display:inline-flex;align-items:center;gap:5px;}
+  .attach-btn:hover{background:var(--ice);}
+  .doc-row{display:flex;justify-content:space-between;align-items:center;padding:9px 0;border-bottom:1px solid #F0F3F7;font-size:12.8px;}
+  .doc-row:last-child{border-bottom:none;}
+  .doc-row .meta{color:var(--gray-600);font-size:11px;}
+  .doc-actions{display:flex;align-items:center;gap:10px;}
+  .doc-actions a{color:var(--blue);text-decoration:none;font-weight:600;font-size:12px;}
+  .upload-box{border:1.5px dashed var(--gray-300);border-radius:9px;padding:14px;text-align:center;margin-bottom:16px;}
+  .upload-box input[type=file]{font-size:12px;}
+
   .tab-view{display:none;}
   .tab-view.active{display:block;}
 
@@ -411,6 +421,20 @@
   </div>
 </div>
 
+<div class="overlay" id="modalDocs">
+  <div class="modal">
+    <h2>📎 Documentos — <span id="docs_titulo"></span></h2>
+    <div class="upload-box">
+      <label style="margin-bottom:8px">Anexar novo arquivo (PDF, imagem, doc — até 8MB)</label>
+      <input type="file" id="docs_fileInput">
+    </div>
+    <div id="docs_list"></div>
+    <div class="modal-actions">
+      <button class="btn btn-ghost" onclick="closeModal('modalDocs')">Fechar</button>
+    </div>
+  </div>
+</div>
+
 <div id="toast"></div>
 
 <script>
@@ -497,6 +521,76 @@ function setBusy(btnId, busy, labelBusy, labelIdle){
 /* ========================= TOP BAR DATE ========================= */
 document.getElementById('todayPill').textContent = new Date().toLocaleDateString('pt-BR',{weekday:'long', day:'2-digit', month:'long'});
 
+/* ========================= DOCUMENTOS (anexos) ========================= */
+function escJs(str){ return String(str==null?'':str).replace(/\\/g,'\\\\').replace(/'/g,"\\'"); }
+
+let docsContext = { recurso:null, itemId:null };
+
+async function openDocsModal(recurso, itemId, titulo){
+  docsContext = { recurso, itemId };
+  document.getElementById('docs_titulo').textContent = titulo;
+  document.getElementById('docs_fileInput').value = '';
+  openModal('modalDocs');
+  await renderDocsList();
+}
+
+document.getElementById('docs_fileInput').addEventListener('change', async (e)=>{
+  const file = e.target.files[0];
+  if(!file) return;
+  if(file.size > 8*1024*1024){ toast('Arquivo muito grande (máx. 8MB).', true); e.target.value=''; return; }
+  const reader = new FileReader();
+  reader.onload = async () => {
+    const base64 = reader.result.split(',')[1];
+    try{
+      const res = await fetch('/api/documentos', {
+        method:'POST', headers:{'Content-Type':'application/json'},
+        body: JSON.stringify({ recurso: docsContext.recurso, itemId: docsContext.itemId, filename: file.name, contentType: file.type, dataBase64: base64 })
+      });
+      if(!res.ok) throw new Error('falha no upload');
+      toast('Documento anexado.');
+      await renderDocsList();
+    }catch(err){ toast('Erro ao anexar documento.', true); }
+    e.target.value='';
+  };
+  reader.readAsDataURL(file);
+});
+
+function formatSize(bytes){
+  if(!bytes) return '';
+  if(bytes < 1024) return bytes+' B';
+  if(bytes < 1024*1024) return (bytes/1024).toFixed(1)+' KB';
+  return (bytes/1024/1024).toFixed(1)+' MB';
+}
+
+async function renderDocsList(){
+  const list = document.getElementById('docs_list');
+  list.innerHTML = '<p style="color:var(--gray-600);font-size:13px">Carregando...</p>';
+  try{
+    const docs = await fetch(`/api/documentos?recurso=${encodeURIComponent(docsContext.recurso)}&itemId=${encodeURIComponent(docsContext.itemId)}`).then(r=>r.json());
+    if(!Array.isArray(docs) || docs.length===0){
+      list.innerHTML = '<p style="color:var(--gray-600);font-size:13px">Nenhum documento anexado ainda.</p>';
+      return;
+    }
+    list.innerHTML = docs.map(d => `
+      <div class="doc-row">
+        <div><b>${d.filename||'arquivo'}</b><div class="meta">${formatSize(d.size)}</div></div>
+        <div class="doc-actions">
+          <a href="/api/documentos?id=${encodeURIComponent(d.key)}" target="_blank">Abrir</a>
+          <button class="icon-btn" onclick="deleteDoc('${escJs(d.key)}')" title="Remover">✕</button>
+        </div>
+      </div>`).join('');
+  }catch(e){ list.innerHTML = '<p style="color:var(--red);font-size:13px">Erro ao carregar documentos.</p>'; }
+}
+
+async function deleteDoc(key){
+  if(!confirm('Remover este documento?')) return;
+  try{
+    await fetch(`/api/documentos?id=${encodeURIComponent(key)}`, { method:'DELETE' });
+    await renderDocsList();
+    toast('Documento removido.');
+  }catch(e){ toast('Erro ao remover documento.', true); }
+}
+
 /* ========================= CLIENTES ========================= */
 function openClienteModal(){
   document.getElementById('c_nome').value='';
@@ -553,6 +647,9 @@ function renderClientes(){
       <div class="row">
         ${statusBadge(contrato ? contrato.status : null)}
         <span class="badge badge-blue">${nFunc} funcionário(s)</span>
+      </div>
+      <div class="tags">
+        <button class="attach-btn" onclick="openDocsModal('clientes','${c.id}','${escJs(c.nome)}')">📎 Documentos</button>
       </div>
     </div>`;
   }).join('');
@@ -611,6 +708,9 @@ function renderContratos(){
       <div class="row">
         ${statusBadge(c.status)}
         ${c.link ? `<a href="${c.link}" target="_blank" class="btn btn-ghost" style="text-decoration:none">Abrir documento</a>` : ''}
+      </div>
+      <div class="tags" style="margin-top:10px">
+        <button class="attach-btn" onclick="openDocsModal('contratos','${c.id}','${escJs(c.clienteNome)}')">📎 Documentos</button>
       </div>
     </div>`).join('');
 }
@@ -695,6 +795,7 @@ function renderFuncionarios(){
         </td>
         <td style="white-space:nowrap">
           ${f.etapa<5?`<button class="icon-btn" style="color:var(--green)" onclick="advanceEtapa('${f.id}')" title="Avançar etapa">➜</button>`:''}
+          <button class="icon-btn" onclick="openDocsModal('funcionarios','${f.id}','${escJs(f.nome)}')" title="Documentos" style="color:var(--blue)">📎</button>
           <button class="icon-btn" onclick="deleteFunc('${f.id}')" title="Remover">✕</button>
         </td>
       </tr>`).join('')}
@@ -765,6 +866,7 @@ function renderSupervisao(){
         <div class="meta">Responsável: ${v.responsavel||'—'}${v.obs? ' · '+v.obs:''}</div>
       </div>
       <div style="display:flex;align-items:center;gap:10px">
+        <button class="attach-btn" onclick="openDocsModal('visitas','${v.id}','${escJs(v.condominioNome)} · ${d.toLocaleDateString('pt-BR')}')">📎</button>
         <span class="badge ${v.status==='Realizada'?'badge-green':'badge-amber'}" style="cursor:pointer" onclick="toggleVisita('${v.id}')">${v.status}</span>
         <button class="icon-btn" onclick="deleteVisita('${v.id}')">✕</button>
       </div>
