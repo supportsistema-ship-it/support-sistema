@@ -1,0 +1,15 @@
+{
+  "name": "support-gestao",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Sistema de gestão interno da SUPPORT Terceirizações — clientes, funcionários, supervisão, contratos e financeiro.",
+  "scripts": {
+    "dev": "netlify dev"
+  },
+  "dependencies": {
+    "@netlify/blobs": "^8.1.0"
+  },
+  "devDependencies": {
+    "netlify-cli": "^17.0.0"
+  }
+}
