@@ -101,6 +101,10 @@
   .kpi .value{font-size:28px;font-weight:800;margin-top:6px;color:var(--navy);}
   .kpi .sub{font-size:11.5px;color:var(--gray-600);margin-top:4px;}
   .kpi::before{content:"";position:absolute;right:-18px;top:-18px;width:70px;height:70px;border-radius:50%;background:var(--ice-soft);}
+  .clickable-card{cursor:pointer;transition:.15s;}
+  .clickable-card:hover{box-shadow:0 6px 18px rgba(10,31,58,0.14);transform:translateY(-2px);border-color:var(--blue);}
+  .panel.clickable-card .section-title{color:var(--navy);}
+  .panel.clickable-card:hover .section-title{color:var(--blue);}
 
   .dash-grid{display:grid;grid-template-columns:1.3fr 1fr;gap:18px;}
   .panel{padding:18px 20px;margin-bottom:18px;}
@@ -224,21 +228,21 @@
 
       <div class="dash-grid">
         <div>
-          <div class="card panel">
+          <div class="card panel clickable-card" onclick="goToTab('supervisao')">
             <div class="section-title"><span class="bar"></span>Próximas visitas de supervisão</div>
             <div id="dashVisitas"></div>
           </div>
-          <div class="card panel">
+          <div class="card panel clickable-card" onclick="goToTab('funcionarios')">
             <div class="section-title"><span class="bar"></span>Admissões em andamento</div>
             <div id="dashAdmissoes"></div>
           </div>
         </div>
         <div>
-          <div class="card panel">
+          <div class="card panel clickable-card" onclick="goToTab('contratos')">
             <div class="section-title"><span class="bar"></span>Contratos pendentes</div>
             <div id="dashContratos"></div>
           </div>
-          <div class="card panel">
+          <div class="card panel clickable-card" onclick="goToTab('financeiro')">
             <div class="section-title"><span class="bar"></span>Financeiro do mês</div>
             <div id="dashFinanceiro"></div>
           </div>
@@ -470,14 +474,16 @@ async function loadState(){
 }
 
 /* ========================= NAV ========================= */
+function goToTab(tab){
+  document.querySelectorAll('.nav-item').forEach(n=>n.classList.toggle('active', n.dataset.tab===tab));
+  document.querySelectorAll('.tab-view').forEach(v=>v.classList.remove('active'));
+  document.getElementById('view-'+tab).classList.add('active');
+  window.scrollTo({top:0, behavior:'smooth'});
+}
 document.getElementById('nav').addEventListener('click', (e)=>{
   const item = e.target.closest('.nav-item');
   if(!item) return;
-  document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
-  item.classList.add('active');
-  const tab = item.dataset.tab;
-  document.querySelectorAll('.tab-view').forEach(v=>v.classList.remove('active'));
-  document.getElementById('view-'+tab).classList.add('active');
+  goToTab(item.dataset.tab);
 });
 
 function closeModal(id){ document.getElementById(id).classList.remove('open'); }
@@ -840,10 +846,10 @@ function renderDashboard(){
   const contratosPendentes = state.contratos.filter(c=>c.status!=='Assinado').length;
 
   document.getElementById('kpiGrid').innerHTML = `
-    <div class="card kpi"><div class="label">Clientes ativos</div><div class="value">${clientesAtivos}</div><div class="sub">Condomínios atendidos</div></div>
-    <div class="card kpi"><div class="label">Funcionários</div><div class="value">${funcAtivos}</div><div class="sub">Alocados em campo</div></div>
-    <div class="card kpi"><div class="label">Visitas pendentes</div><div class="value">${visitasPendentes}</div><div class="sub">Aguardando supervisão</div></div>
-    <div class="card kpi"><div class="label">Saldo financeiro</div><div class="value">${brl(receitas-despesas)}</div><div class="sub">Receitas − despesas</div></div>
+    <div class="card kpi clickable-card" onclick="goToTab('clientes')"><div class="label">Clientes ativos</div><div class="value">${clientesAtivos}</div><div class="sub">Condomínios atendidos</div></div>
+    <div class="card kpi clickable-card" onclick="goToTab('funcionarios')"><div class="label">Funcionários</div><div class="value">${funcAtivos}</div><div class="sub">Alocados em campo</div></div>
+    <div class="card kpi clickable-card" onclick="goToTab('supervisao')"><div class="label">Visitas pendentes</div><div class="value">${visitasPendentes}</div><div class="sub">Aguardando supervisão</div></div>
+    <div class="card kpi clickable-card" onclick="goToTab('financeiro')"><div class="label">Saldo financeiro</div><div class="value">${brl(receitas-despesas)}</div><div class="sub">Receitas − despesas</div></div>
   `;
 
   const proxVisitas = [...state.visitas].filter(v=>v.status==='Pendente').sort((a,b)=>a.data.localeCompare(b.data)).slice(0,4);
