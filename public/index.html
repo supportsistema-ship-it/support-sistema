@@ -203,6 +203,22 @@
 
   #bootError{display:none;background:#FBEAEA;border:1px solid #F0C6C2;color:var(--red);padding:14px 18px;border-radius:10px;font-size:13px;margin-bottom:20px;}
 
+  /* ---------- LOGIN ---------- */
+  #loginScreen{
+    position:fixed;inset:0;z-index:200;display:flex;align-items:center;justify-content:center;
+    background:linear-gradient(160deg,var(--navy) 0%, #0d2649 60%, var(--blue) 140%);
+  }
+  #loginScreen.hidden{display:none;}
+  .login-card{background:#fff;border-radius:16px;padding:38px 34px;width:100%;max-width:360px;box-shadow:0 24px 60px rgba(10,31,58,0.35);}
+  .login-card img{height:38px;display:block;margin:0 auto 22px;}
+  .login-card h1{font-size:16px;text-align:center;margin:0 0 4px;color:var(--navy);}
+  .login-card p{font-size:12.5px;text-align:center;color:var(--gray-600);margin:0 0 22px;}
+  .login-error{background:#FBEAEA;color:var(--red);font-size:12.5px;padding:9px 12px;border-radius:8px;margin-bottom:14px;display:none;}
+  .login-error.show{display:block;}
+  .login-card .btn-primary{width:100%;justify-content:center;padding:11px;margin-top:6px;}
+  .logout-link{font-size:11px;color:#93A6BC;cursor:pointer;text-decoration:underline;margin-top:6px;display:inline-block;}
+  .logout-link:hover{color:#fff;}
+
   @media(max-width:1000px){
     .kpi-grid{grid-template-columns:repeat(2,1fr);}
     .dash-grid{grid-template-columns:1fr;}
@@ -211,12 +227,62 @@
     .brand-text,.nav-item span.label-text{display:none;}
     .main{padding:20px;}
   }
+
+  /* ---------- MOBILE (gaveta lateral) ---------- */
+  .hamburger{
+    display:none;position:fixed;top:14px;left:14px;z-index:70;
+    background:var(--navy);color:#fff;border:none;width:42px;height:42px;border-radius:9px;
+    font-size:18px;cursor:pointer;box-shadow:0 4px 14px rgba(10,31,58,0.3);align-items:center;justify-content:center;
+  }
+  .sidebar-overlay{display:none;position:fixed;inset:0;background:rgba(10,31,58,0.5);z-index:65;}
+  .sidebar-overlay.show{display:block;}
+
+  @media(max-width:768px){
+    .hamburger{display:flex;}
+    .sidebar{
+      position:fixed;top:0;bottom:0;left:0;width:250px;z-index:66;
+      transform:translateX(-100%);transition:transform .25s ease;box-shadow:0 0 40px rgba(0,0,0,0.35);
+    }
+    .sidebar.open{transform:translateX(0);}
+    .sidebar .brand-text,.sidebar .nav-item span.label-text{display:block;}
+    .main{padding:70px 16px 40px;}
+    .topbar{flex-direction:column;align-items:flex-start;gap:10px;}
+    .kpi-grid{grid-template-columns:1fr 1fr;gap:10px;}
+    .client-grid{grid-template-columns:1fr;}
+    .grid-2,.grid-3{grid-template-columns:1fr;}
+    .fin-summary{grid-template-columns:1fr;}
+    .modal{max-width:100%;margin:0;padding:20px;}
+    .overlay{padding:0;align-items:flex-end;}
+    .modal{max-height:92vh;border-radius:16px 16px 0 0;}
+    .kanban-col{flex:0 0 240px;}
+    .emp-table{font-size:11.5px;}
+    .login-card{padding:28px 22px;}
+  }
+  @media(max-width:420px){
+    .kpi-grid{grid-template-columns:1fr;}
+    .today-pill{font-size:11px;padding:6px 12px;}
+    .topbar h1{font-size:19px;}
+  }
 </style>
 </head>
 <body>
 
-<div class="shell">
-  <aside class="sidebar">
+<div id="loginScreen">
+  <div class="login-card">
+    <img src="assets/icon-navy.png" alt="SUPPORT">
+    <h1>Sistema de Gestão SUPPORT</h1>
+    <p>Entre com suas credenciais para continuar.</p>
+    <div class="login-error" id="loginError"></div>
+    <div class="field"><label>E-mail</label><input id="login_email" type="email" placeholder="seu@email.com" autocomplete="username"></div>
+    <div class="field"><label>Senha</label><input id="login_senha" type="password" placeholder="••••••••" autocomplete="current-password"></div>
+    <button class="btn btn-primary" id="login_btn" onclick="doLogin()">Entrar</button>
+  </div>
+</div>
+
+<div class="shell" id="appShell" style="display:none">
+  <button class="hamburger" id="hamburgerBtn" onclick="toggleMobileSidebar()">☰</button>
+  <div class="sidebar-overlay" id="sidebarOverlay" onclick="closeMobileSidebar()"></div>
+  <aside class="sidebar" id="sidebar">
     <div class="brand">
       <img src="assets/icon-white.png" alt="SUPPORT" class="brand-icon">
       <div class="brand-text">
@@ -235,6 +301,7 @@
     </nav>
     <div class="sidebar-footer">
       <p>Compromisso · Respeito · Confiança<br>Dados salvos no backend (Netlify Blobs).</p>
+      <span class="logout-link" onclick="doLogout()">Sair</span>
     </div>
   </aside>
 
@@ -490,13 +557,67 @@
 <div id="toast"></div>
 
 <script>
+/* ========================= AUTH ========================= */
+let AUTH_TOKEN = sessionStorage.getItem('support_token') || null;
+let AUTH_EXP = parseInt(sessionStorage.getItem('support_token_exp') || '0', 10);
+
+function isAuthenticated(){
+  return AUTH_TOKEN && AUTH_EXP && Date.now() < AUTH_EXP;
+}
+function showLogin(msg){
+  document.getElementById('loginScreen').classList.remove('hidden');
+  document.getElementById('appShell').style.display = 'none';
+  const err = document.getElementById('loginError');
+  if(msg){ err.textContent = msg; err.classList.add('show'); } else { err.classList.remove('show'); }
+  document.getElementById('login_senha').value = '';
+}
+function hideLogin(){
+  document.getElementById('loginScreen').classList.add('hidden');
+  document.getElementById('appShell').style.display = 'flex';
+}
+async function doLogin(){
+  const email = document.getElementById('login_email').value.trim();
+  const senha = document.getElementById('login_senha').value;
+  const btn = document.getElementById('login_btn');
+  if(!email || !senha){ showLogin('Preencha e-mail e senha.'); return; }
+  btn.disabled = true; btn.textContent = 'Entrando...';
+  try{
+    const res = await fetch('/api/auth', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ email, password: senha }) });
+    const data = await res.json();
+    if(!res.ok){ showLogin(data.error || 'E-mail ou senha inválidos.'); btn.disabled=false; btn.textContent='Entrar'; return; }
+    AUTH_TOKEN = data.token; AUTH_EXP = data.exp;
+    sessionStorage.setItem('support_token', AUTH_TOKEN);
+    sessionStorage.setItem('support_token_exp', String(AUTH_EXP));
+    hideLogin();
+    loadState();
+    initNavHistory();
+  }catch(e){
+    showLogin('Não foi possível conectar ao servidor. Isso é esperado se o site não estiver publicado no Netlify.');
+  }
+  btn.disabled = false; btn.textContent = 'Entrar';
+}
+function doLogout(){
+  AUTH_TOKEN = null; AUTH_EXP = 0;
+  sessionStorage.removeItem('support_token');
+  sessionStorage.removeItem('support_token_exp');
+  showLogin();
+}
+document.getElementById('login_senha').addEventListener('keydown', (e)=>{ if(e.key==='Enter') doLogin(); });
+document.getElementById('login_email').addEventListener('keydown', (e)=>{ if(e.key==='Enter') doLogin(); });
+
 /* ========================= API LAYER ========================= */
 function api(resource){
+  const authHeaders = () => ({ 'Content-Type':'application/json', 'Authorization': 'Bearer '+AUTH_TOKEN });
+  async function handle(res){
+    if(res.status === 401){ doLogout(); throw new Error('Sessão expirada'); }
+    if(!res.ok) throw new Error('Falha na requisição');
+    return res.json();
+  }
   return {
-    list: () => fetch(`/api/${resource}`).then(r=>{ if(!r.ok) throw new Error('Falha ao carregar '+resource); return r.json(); }),
-    create: (body) => fetch(`/api/${resource}`, { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(body) }).then(r=>{ if(!r.ok) throw new Error('Falha ao salvar'); return r.json(); }),
-    update: (id, body) => fetch(`/api/${resource}?id=${id}`, { method:'PUT', headers:{'Content-Type':'application/json'}, body: JSON.stringify(body) }).then(r=>{ if(!r.ok) throw new Error('Falha ao atualizar'); return r.json(); }),
-    remove: (id) => fetch(`/api/${resource}?id=${id}`, { method:'DELETE' }).then(r=>{ if(!r.ok) throw new Error('Falha ao remover'); return r.json(); }),
+    list: () => fetch(`/api/${resource}`, { headers: authHeaders() }).then(handle),
+    create: (body) => fetch(`/api/${resource}`, { method:'POST', headers: authHeaders(), body: JSON.stringify(body) }).then(handle),
+    update: (id, body) => fetch(`/api/${resource}?id=${id}`, { method:'PUT', headers: authHeaders(), body: JSON.stringify(body) }).then(handle),
+    remove: (id) => fetch(`/api/${resource}?id=${id}`, { method:'DELETE', headers: authHeaders() }).then(handle),
   };
 }
 
@@ -551,18 +672,42 @@ async function loadState(){
   renderAll();
 }
 
-/* ========================= NAV ========================= */
-function goToTab(tab){
+/* ========================= NAV (com suporte ao botão voltar do navegador) ========================= */
+const VALID_TABS = ['dashboard','comercial','clientes','contratos','funcionarios','supervisao','financeiro'];
+
+function showTab(tab){
   document.querySelectorAll('.nav-item').forEach(n=>n.classList.toggle('active', n.dataset.tab===tab));
   document.querySelectorAll('.tab-view').forEach(v=>v.classList.remove('active'));
   document.getElementById('view-'+tab).classList.add('active');
   window.scrollTo({top:0, behavior:'smooth'});
+  closeMobileSidebar();
 }
+function goToTab(tab){
+  if(!VALID_TABS.includes(tab)) tab = 'dashboard';
+  showTab(tab);
+  if(location.hash !== '#'+tab){
+    history.pushState({ tab }, '', '#'+tab);
+  }
+}
+window.addEventListener('popstate', (e)=>{
+  const tab = (e.state && e.state.tab) || (location.hash ? location.hash.slice(1) : 'dashboard');
+  showTab(VALID_TABS.includes(tab) ? tab : 'dashboard');
+});
 document.getElementById('nav').addEventListener('click', (e)=>{
   const item = e.target.closest('.nav-item');
   if(!item) return;
   goToTab(item.dataset.tab);
 });
+
+/* ========================= MENU MOBILE ========================= */
+function toggleMobileSidebar(){
+  document.getElementById('sidebar').classList.toggle('open');
+  document.getElementById('sidebarOverlay').classList.toggle('show');
+}
+function closeMobileSidebar(){
+  document.getElementById('sidebar').classList.remove('open');
+  document.getElementById('sidebarOverlay').classList.remove('show');
+}
 
 function closeModal(id){ document.getElementById(id).classList.remove('open'); }
 function openModal(id){ document.getElementById(id).classList.add('open'); }
@@ -1164,7 +1309,19 @@ function renderAll(){
   renderComercial();
 }
 
-loadState();
+/* ========================= INICIALIZAÇÃO ========================= */
+function initNavHistory(){
+  const initialTab = VALID_TABS.includes(location.hash.slice(1)) ? location.hash.slice(1) : 'dashboard';
+  showTab(initialTab);
+  history.replaceState({ tab: initialTab }, '', '#'+initialTab);
+}
+if(isAuthenticated()){
+  hideLogin();
+  loadState();
+  initNavHistory();
+}else{
+  showLogin();
+}
 </script>
 </body>
 </html>
