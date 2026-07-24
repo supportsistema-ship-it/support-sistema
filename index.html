@@ -86,6 +86,7 @@
   .field{margin-bottom:12px;}
   .grid-2{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
   .grid-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;}
+  .hint{font-size:11px;color:var(--gray-600);margin-top:-8px;margin-bottom:12px;}
 
   .badge{display:inline-flex;align-items:center;padding:3px 10px;border-radius:999px;font-size:11px;font-weight:700;letter-spacing:.2px;}
   .badge-green{background:#E4F5EC;color:var(--green);}
@@ -103,7 +104,6 @@
   .kpi::before{content:"";position:absolute;right:-18px;top:-18px;width:70px;height:70px;border-radius:50%;background:var(--ice-soft);}
   .clickable-card{cursor:pointer;transition:.15s;}
   .clickable-card:hover{box-shadow:0 6px 18px rgba(10,31,58,0.14);transform:translateY(-2px);border-color:var(--blue);}
-  .panel.clickable-card .section-title{color:var(--navy);}
   .panel.clickable-card:hover .section-title{color:var(--blue);}
 
   .dash-grid{display:grid;grid-template-columns:1.3fr 1fr;gap:18px;}
@@ -112,22 +112,28 @@
   .list-row:last-child{border-bottom:none;}
   .list-row .meta{color:var(--gray-600);font-size:12px;}
 
+  /* ---------- CARD ACTIONS (editar / drive / excluir) ---------- */
+  .card-actions{position:absolute;top:14px;right:14px;display:flex;gap:4px;}
+  .icon-btn{background:none;border:none;color:var(--gray-600);cursor:pointer;font-size:13px;padding:4px;border-radius:6px;line-height:1;}
+  .icon-btn:hover{color:var(--red);background:#FBEAEA;}
+  .icon-btn.edit:hover{color:var(--blue);background:var(--ice-soft);}
+  .drive-link{color:var(--blue);text-decoration:none;font-size:11.5px;font-weight:700;display:inline-flex;align-items:center;gap:4px;background:var(--ice-soft);padding:4px 10px;border-radius:999px;}
+  .drive-link:hover{background:var(--ice);}
+  .drive-link.disabled{color:var(--gray-600);background:#EEF1F4;cursor:default;pointer-events:none;}
+
   /* ---------- CLIENTES ---------- */
   .client-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:16px;}
   .client-card{padding:18px;position:relative;}
-  .client-card h3{margin:0 0 3px;font-size:15.5px;}
+  .client-card h3{margin:0 40px 3px 0;font-size:15.5px;}
   .client-card .sindica{font-size:12px;color:var(--gray-600);margin-bottom:10px;}
   .client-card .addr{font-size:12px;color:var(--gray-600);margin-bottom:12px;line-height:1.4;}
-  .client-card .row{display:flex;justify-content:space-between;align-items:center;margin-top:8px;}
-  .client-card .tags{display:flex;gap:6px;flex-wrap:wrap;margin-top:10px;}
-  .icon-btn{background:none;border:none;color:var(--gray-600);cursor:pointer;font-size:13px;padding:2px;}
-  .icon-btn:hover{color:var(--red);}
+  .client-card .row{display:flex;justify-content:space-between;align-items:center;margin-top:8px;flex-wrap:wrap;gap:8px;}
 
   /* ---------- CONTRATOS ---------- */
   .contrato-card{padding:18px;position:relative;}
-  .contrato-card h3{margin:0 0 8px;font-size:15px;}
+  .contrato-card h3{margin:0 40px 8px 0;font-size:15px;}
   .contrato-card .meta-row{font-size:12px;color:var(--gray-600);margin-bottom:4px;}
-  .contrato-card .row{display:flex;justify-content:space-between;align-items:center;margin-top:12px;}
+  .contrato-card .row{display:flex;justify-content:space-between;align-items:center;margin-top:12px;flex-wrap:wrap;gap:8px;}
 
   /* ---------- FUNCIONÁRIOS ---------- */
   .emp-table{width:100%;border-collapse:collapse;font-size:12.8px;}
@@ -140,11 +146,11 @@
   .step.current{background:var(--amber);}
 
   /* ---------- SUPERVISÃO ---------- */
-  .visit-card{padding:14px 16px;display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;}
+  .visit-card{padding:14px 16px;display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;gap:10px;flex-wrap:wrap;}
   .visit-date{width:56px;text-align:center;flex-shrink:0;}
   .visit-date .d{font-size:19px;font-weight:800;line-height:1;}
   .visit-date .m{font-size:10px;color:var(--gray-600);text-transform:uppercase;font-weight:700;}
-  .visit-info{flex:1;padding:0 14px;}
+  .visit-info{flex:1;padding:0 14px;min-width:180px;}
   .visit-info b{font-size:13.5px;}
   .visit-info .meta{font-size:11.5px;color:var(--gray-600);margin-top:2px;}
 
@@ -155,6 +161,24 @@
   .fin-table td{padding:10px;border-bottom:1px solid #F0F3F7;}
   .amount-in{color:var(--green);font-weight:700;}
   .amount-out{color:var(--red);font-weight:700;}
+
+  /* ---------- COMERCIAL (kanban) ---------- */
+  .kanban-board{display:flex;gap:14px;overflow-x:auto;padding-bottom:12px;align-items:flex-start;}
+  .kanban-col{flex:0 0 268px;background:#EEF2F6;border-radius:12px;padding:12px;min-height:200px;}
+  .kanban-col.drag-over{background:var(--ice-soft);outline:2px dashed var(--blue);}
+  .kanban-col h4{font-size:11.5px;text-transform:uppercase;letter-spacing:.4px;color:var(--gray-600);margin:2px 0 12px;display:flex;justify-content:space-between;align-items:center;}
+  .kanban-col h4 .count{background:var(--white);border-radius:999px;padding:1px 9px;font-size:11px;color:var(--navy);font-weight:700;}
+  .kanban-cards{display:flex;flex-direction:column;gap:9px;min-height:40px;}
+  .lead-card{background:#fff;border-radius:9px;padding:11px 12px;box-shadow:0 1px 4px rgba(10,31,58,0.08);font-size:12.5px;cursor:grab;}
+  .lead-card:active{cursor:grabbing;}
+  .lead-card b{font-size:13.5px;display:block;margin-bottom:3px;}
+  .lead-card .meta{color:var(--gray-600);font-size:11px;margin-bottom:2px;}
+  .lead-card .valor{color:var(--green);font-weight:700;font-size:12.5px;margin-top:4px;display:block;}
+  .lead-actions{display:flex;justify-content:space-between;align-items:center;margin-top:9px;}
+  .lead-move{display:flex;gap:4px;}
+  .lead-move button{background:var(--ice-soft);border:none;color:var(--blue);width:22px;height:22px;border-radius:5px;cursor:pointer;font-size:11px;line-height:1;}
+  .lead-move button:disabled{opacity:.25;cursor:not-allowed;}
+  .lead-icons{display:flex;gap:2px;}
 
   /* ---------- MODAL ---------- */
   .overlay{position:fixed;inset:0;background:rgba(10,31,58,0.45);display:none;align-items:center;justify-content:center;z-index:50;padding:20px;}
@@ -179,6 +203,22 @@
 
   #bootError{display:none;background:#FBEAEA;border:1px solid #F0C6C2;color:var(--red);padding:14px 18px;border-radius:10px;font-size:13px;margin-bottom:20px;}
 
+  /* ---------- LOGIN ---------- */
+  #loginScreen{
+    position:fixed;inset:0;z-index:200;display:flex;align-items:center;justify-content:center;
+    background:linear-gradient(160deg,var(--navy) 0%, #0d2649 60%, var(--blue) 140%);
+  }
+  #loginScreen.hidden{display:none;}
+  .login-card{background:#fff;border-radius:16px;padding:38px 34px;width:100%;max-width:360px;box-shadow:0 24px 60px rgba(10,31,58,0.35);}
+  .login-card img{height:38px;display:block;margin:0 auto 22px;}
+  .login-card h1{font-size:16px;text-align:center;margin:0 0 4px;color:var(--navy);}
+  .login-card p{font-size:12.5px;text-align:center;color:var(--gray-600);margin:0 0 22px;}
+  .login-error{background:#FBEAEA;color:var(--red);font-size:12.5px;padding:9px 12px;border-radius:8px;margin-bottom:14px;display:none;}
+  .login-error.show{display:block;}
+  .login-card .btn-primary{width:100%;justify-content:center;padding:11px;margin-top:6px;}
+  .logout-link{font-size:11px;color:#93A6BC;cursor:pointer;text-decoration:underline;margin-top:6px;display:inline-block;}
+  .logout-link:hover{color:#fff;}
+
   @media(max-width:1000px){
     .kpi-grid{grid-template-columns:repeat(2,1fr);}
     .dash-grid{grid-template-columns:1fr;}
@@ -187,12 +227,62 @@
     .brand-text,.nav-item span.label-text{display:none;}
     .main{padding:20px;}
   }
+
+  /* ---------- MOBILE (gaveta lateral) ---------- */
+  .hamburger{
+    display:none;position:fixed;top:14px;left:14px;z-index:70;
+    background:var(--navy);color:#fff;border:none;width:42px;height:42px;border-radius:9px;
+    font-size:18px;cursor:pointer;box-shadow:0 4px 14px rgba(10,31,58,0.3);align-items:center;justify-content:center;
+  }
+  .sidebar-overlay{display:none;position:fixed;inset:0;background:rgba(10,31,58,0.5);z-index:65;}
+  .sidebar-overlay.show{display:block;}
+
+  @media(max-width:768px){
+    .hamburger{display:flex;}
+    .sidebar{
+      position:fixed;top:0;bottom:0;left:0;width:250px;z-index:66;
+      transform:translateX(-100%);transition:transform .25s ease;box-shadow:0 0 40px rgba(0,0,0,0.35);
+    }
+    .sidebar.open{transform:translateX(0);}
+    .sidebar .brand-text,.sidebar .nav-item span.label-text{display:block;}
+    .main{padding:70px 16px 40px;}
+    .topbar{flex-direction:column;align-items:flex-start;gap:10px;}
+    .kpi-grid{grid-template-columns:1fr 1fr;gap:10px;}
+    .client-grid{grid-template-columns:1fr;}
+    .grid-2,.grid-3{grid-template-columns:1fr;}
+    .fin-summary{grid-template-columns:1fr;}
+    .modal{max-width:100%;margin:0;padding:20px;}
+    .overlay{padding:0;align-items:flex-end;}
+    .modal{max-height:92vh;border-radius:16px 16px 0 0;}
+    .kanban-col{flex:0 0 240px;}
+    .emp-table{font-size:11.5px;}
+    .login-card{padding:28px 22px;}
+  }
+  @media(max-width:420px){
+    .kpi-grid{grid-template-columns:1fr;}
+    .today-pill{font-size:11px;padding:6px 12px;}
+    .topbar h1{font-size:19px;}
+  }
 </style>
 </head>
 <body>
 
-<div class="shell">
-  <aside class="sidebar">
+<div id="loginScreen">
+  <div class="login-card">
+    <img src="assets/icon-navy.png" alt="SUPPORT">
+    <h1>Sistema de Gestão SUPPORT</h1>
+    <p>Entre com suas credenciais para continuar.</p>
+    <div class="login-error" id="loginError"></div>
+    <div class="field"><label>E-mail</label><input id="login_email" type="email" placeholder="seu@email.com" autocomplete="username"></div>
+    <div class="field"><label>Senha</label><input id="login_senha" type="password" placeholder="••••••••" autocomplete="current-password"></div>
+    <button class="btn btn-primary" id="login_btn" onclick="doLogin()">Entrar</button>
+  </div>
+</div>
+
+<div class="shell" id="appShell" style="display:none">
+  <button class="hamburger" id="hamburgerBtn" onclick="toggleMobileSidebar()">☰</button>
+  <div class="sidebar-overlay" id="sidebarOverlay" onclick="closeMobileSidebar()"></div>
+  <aside class="sidebar" id="sidebar">
     <div class="brand">
       <img src="assets/icon-white.png" alt="SUPPORT" class="brand-icon">
       <div class="brand-text">
@@ -202,6 +292,7 @@
     </div>
     <nav id="nav">
       <div class="nav-item active" data-tab="dashboard"><span class="dot"></span><span class="label-text">Dashboard</span></div>
+      <div class="nav-item" data-tab="comercial"><span class="dot"></span><span class="label-text">Comercial</span></div>
       <div class="nav-item" data-tab="clientes"><span class="dot"></span><span class="label-text">Clientes</span></div>
       <div class="nav-item" data-tab="contratos"><span class="dot"></span><span class="label-text">Contratos</span></div>
       <div class="nav-item" data-tab="funcionarios"><span class="dot"></span><span class="label-text">Funcionários</span></div>
@@ -210,6 +301,7 @@
     </nav>
     <div class="sidebar-footer">
       <p>Compromisso · Respeito · Confiança<br>Dados salvos no backend (Netlify Blobs).</p>
+      <span class="logout-link" onclick="doLogout()">Sair</span>
     </div>
   </aside>
 
@@ -250,6 +342,15 @@
       </div>
     </div>
 
+    <!-- COMERCIAL -->
+    <div class="tab-view" id="view-comercial">
+      <div class="topbar">
+        <div><h1>Comercial</h1><p>Funil de prospecção — arraste os cards entre as etapas ou use as setas.</p></div>
+      </div>
+      <div class="fab-row"><button class="btn btn-primary" onclick="openLeadModal()">+ Novo lead</button></div>
+      <div class="kanban-board" id="kanbanBoard"></div>
+    </div>
+
     <!-- CLIENTES -->
     <div class="tab-view" id="view-clientes">
       <div class="topbar">
@@ -271,7 +372,7 @@
     <!-- FUNCIONARIOS -->
     <div class="tab-view" id="view-funcionarios">
       <div class="topbar">
-        <div><h1>Funcionários</h1><p>Equipe alocada e fluxo de admissão.</p></div>
+        <div><h1>Funcionários</h1><p>Equipe alocada, fluxo de admissão e status.</p></div>
       </div>
       <div class="fab-row"><button class="btn btn-primary" onclick="openFuncModal()">+ Novo funcionário</button></div>
       <div class="card" style="padding:6px 18px 18px;overflow-x:auto;">
@@ -303,13 +404,14 @@
   </main>
 </div>
 
-<!-- MODALS -->
+<!-- MODAL: CLIENTE -->
 <div class="overlay" id="modalCliente">
   <div class="modal">
-    <h2>🏢 Novo cliente</h2>
+    <h2 id="c_titulo">🏢 Novo cliente</h2>
     <div class="field"><label>Nome do condomínio</label><input id="c_nome" placeholder="Ed. Exemplo"></div>
     <div class="field"><label>Síndica(o)</label><input id="c_sindica" placeholder="Nome"></div>
     <div class="field"><label>Endereço</label><input id="c_endereco" placeholder="Rua, número, bairro"></div>
+    <div class="field"><label>Link do Drive (documentos)</label><input id="c_drivelink" placeholder="https://drive.google.com/..."></div>
     <div class="modal-actions">
       <button class="btn btn-ghost" onclick="closeModal('modalCliente')">Cancelar</button>
       <button class="btn btn-primary" id="c_saveBtn" onclick="saveCliente()">Salvar</button>
@@ -317,23 +419,24 @@
   </div>
 </div>
 
+<!-- MODAL: CONTRATO -->
 <div class="overlay" id="modalContrato">
   <div class="modal">
-    <h2>📄 Novo contrato</h2>
+    <h2 id="ct_titulo">📄 Novo contrato</h2>
     <div class="field"><label>Cliente</label><select id="ct_cliente"></select></div>
     <div class="grid-2">
       <div class="field"><label>Status</label>
-        <select id="ct_status"><option>Rascunho</option><option>Enviado</option><option selected>Assinado</option></select>
+        <select id="ct_status"><option>Rascunho</option><option>Enviado</option><option>Assinado</option><option>Assinado fisicamente</option></select>
       </div>
       <div class="field"><label>Plataforma</label>
-        <select id="ct_plataforma"><option>Clicksign</option><option>D4Sign</option></select>
+        <select id="ct_plataforma"><option>Clicksign</option><option>D4Sign</option><option>Físico</option></select>
       </div>
     </div>
     <div class="grid-2">
       <div class="field"><label>Data de envio</label><input id="ct_dataEnvio" type="date"></div>
       <div class="field"><label>Data de assinatura</label><input id="ct_dataAssinatura" type="date"></div>
     </div>
-    <div class="field"><label>Link do documento</label><input id="ct_link" placeholder="https://..."></div>
+    <div class="field"><label>Link do Drive (documento)</label><input id="ct_link" placeholder="https://drive.google.com/..."></div>
     <div class="modal-actions">
       <button class="btn btn-ghost" onclick="closeModal('modalContrato')">Cancelar</button>
       <button class="btn btn-primary" id="ct_saveBtn" onclick="saveContrato()">Salvar</button>
@@ -341,9 +444,10 @@
   </div>
 </div>
 
+<!-- MODAL: FUNCIONÁRIO -->
 <div class="overlay" id="modalFunc">
   <div class="modal">
-    <h2>👷 Novo funcionário</h2>
+    <h2 id="f_titulo">👷 Novo funcionário</h2>
     <div class="field"><label>Nome</label><input id="f_nome" placeholder="Nome completo"></div>
     <div class="grid-2">
       <div class="field"><label>Cargo</label>
@@ -366,6 +470,17 @@
         </select>
       </div>
     </div>
+    <div class="field"><label>Status</label>
+      <select id="f_status" onchange="toggleAfastamentoFields()"><option>Ativo</option><option>Afastado</option><option>Desligado</option></select>
+    </div>
+    <div id="f_afastamentoBlock" style="display:none">
+      <div class="grid-2">
+        <div class="field"><label>Início do afastamento</label><input id="f_dataInicio" type="date"></div>
+        <div class="field"><label>Retorno previsto</label><input id="f_dataRetorno" type="date"></div>
+      </div>
+      <div class="field"><label>Link do Drive (documentos do afastamento)</label><input id="f_driveLinkAfastamento" placeholder="https://drive.google.com/..."></div>
+    </div>
+    <div class="field"><label>Link do Drive (documentos gerais)</label><input id="f_driveLink" placeholder="https://drive.google.com/..."></div>
     <div class="modal-actions">
       <button class="btn btn-ghost" onclick="closeModal('modalFunc')">Cancelar</button>
       <button class="btn btn-primary" id="f_saveBtn" onclick="saveFunc()">Salvar</button>
@@ -373,9 +488,10 @@
   </div>
 </div>
 
+<!-- MODAL: VISITA -->
 <div class="overlay" id="modalVisita">
   <div class="modal">
-    <h2>📋 Agendar visita</h2>
+    <h2 id="v_titulo">📋 Agendar visita</h2>
     <div class="grid-2">
       <div class="field"><label>Data</label><input id="v_data" type="date"></div>
       <div class="field"><label>Condomínio</label><select id="v_condominio"></select></div>
@@ -385,6 +501,7 @@
       <select id="v_status"><option>Pendente</option><option>Realizada</option></select>
     </div>
     <div class="field"><label>Observações</label><textarea id="v_obs" rows="3" placeholder="Pontos verificados, pendências..."></textarea></div>
+    <div class="field"><label>Link do Drive (registro da visita)</label><input id="v_driveLink" placeholder="https://drive.google.com/..."></div>
     <div class="modal-actions">
       <button class="btn btn-ghost" onclick="closeModal('modalVisita')">Cancelar</button>
       <button class="btn btn-primary" id="v_saveBtn" onclick="saveVisita()">Salvar</button>
@@ -392,9 +509,10 @@
   </div>
 </div>
 
+<!-- MODAL: FINANCEIRO -->
 <div class="overlay" id="modalFin">
   <div class="modal">
-    <h2>💰 Novo lançamento</h2>
+    <h2 id="ff_titulo">💰 Novo lançamento</h2>
     <div class="grid-2">
       <div class="field"><label>Tipo</label><select id="ff_tipo"><option>Receita</option><option>Despesa</option></select></div>
       <div class="field"><label>Data</label><input id="ff_data" type="date"></div>
@@ -411,20 +529,101 @@
   </div>
 </div>
 
+<!-- MODAL: LEAD (COMERCIAL) -->
+<div class="overlay" id="modalLead">
+  <div class="modal">
+    <h2 id="lead_titulo">🎯 Novo lead</h2>
+    <div class="field"><label>Nome (condomínio / empresa)</label><input id="lead_nome" placeholder="Ed. Exemplo"></div>
+    <div class="grid-2">
+      <div class="field"><label>Contato</label><input id="lead_contato" placeholder="Nome do responsável"></div>
+      <div class="field"><label>Telefone</label><input id="lead_telefone" placeholder="(13) 90000-0000"></div>
+    </div>
+    <div class="grid-2">
+      <div class="field"><label>Valor estimado (R$/mês)</label><input id="lead_valor" type="number" step="0.01" placeholder="0,00"></div>
+      <div class="field"><label>Origem</label>
+        <select id="lead_origem"><option>Indicação</option><option>Site</option><option>Redes sociais</option><option>Prospecção ativa</option><option>Outro</option></select>
+      </div>
+    </div>
+    <div class="field"><label>Responsável</label><input id="lead_responsavel" placeholder="Nome" value="Alexandre"></div>
+    <div class="field"><label>Etapa</label><select id="lead_stage"></select></div>
+    <div class="field"><label>Observações</label><textarea id="lead_obs" rows="3" placeholder="Contexto da negociação..."></textarea></div>
+    <div class="modal-actions">
+      <button class="btn btn-ghost" onclick="closeModal('modalLead')">Cancelar</button>
+      <button class="btn btn-primary" id="lead_saveBtn" onclick="saveLead()">Salvar</button>
+    </div>
+  </div>
+</div>
+
 <div id="toast"></div>
 
 <script>
+/* ========================= AUTH ========================= */
+let AUTH_TOKEN = sessionStorage.getItem('support_token') || null;
+let AUTH_EXP = parseInt(sessionStorage.getItem('support_token_exp') || '0', 10);
+
+function isAuthenticated(){
+  return AUTH_TOKEN && AUTH_EXP && Date.now() < AUTH_EXP;
+}
+function showLogin(msg){
+  document.getElementById('loginScreen').classList.remove('hidden');
+  document.getElementById('appShell').style.display = 'none';
+  const err = document.getElementById('loginError');
+  if(msg){ err.textContent = msg; err.classList.add('show'); } else { err.classList.remove('show'); }
+  document.getElementById('login_senha').value = '';
+}
+function hideLogin(){
+  document.getElementById('loginScreen').classList.add('hidden');
+  document.getElementById('appShell').style.display = 'flex';
+}
+async function doLogin(){
+  const email = document.getElementById('login_email').value.trim();
+  const senha = document.getElementById('login_senha').value;
+  const btn = document.getElementById('login_btn');
+  if(!email || !senha){ showLogin('Preencha e-mail e senha.'); return; }
+  btn.disabled = true; btn.textContent = 'Entrando...';
+  try{
+    const res = await fetch('/api/auth', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ email, password: senha }) });
+    const data = await res.json();
+    if(!res.ok){ showLogin(data.error || 'E-mail ou senha inválidos.'); btn.disabled=false; btn.textContent='Entrar'; return; }
+    AUTH_TOKEN = data.token; AUTH_EXP = data.exp;
+    sessionStorage.setItem('support_token', AUTH_TOKEN);
+    sessionStorage.setItem('support_token_exp', String(AUTH_EXP));
+    hideLogin();
+    loadState();
+    initNavHistory();
+  }catch(e){
+    showLogin('Não foi possível conectar ao servidor. Isso é esperado se o site não estiver publicado no Netlify.');
+  }
+  btn.disabled = false; btn.textContent = 'Entrar';
+}
+function doLogout(){
+  AUTH_TOKEN = null; AUTH_EXP = 0;
+  sessionStorage.removeItem('support_token');
+  sessionStorage.removeItem('support_token_exp');
+  showLogin();
+}
+document.getElementById('login_senha').addEventListener('keydown', (e)=>{ if(e.key==='Enter') doLogin(); });
+document.getElementById('login_email').addEventListener('keydown', (e)=>{ if(e.key==='Enter') doLogin(); });
+
 /* ========================= API LAYER ========================= */
 function api(resource){
+  const authHeaders = () => ({ 'Content-Type':'application/json', 'Authorization': 'Bearer '+AUTH_TOKEN });
+  async function handle(res){
+    if(res.status === 401){ doLogout(); throw new Error('Sessão expirada'); }
+    if(!res.ok) throw new Error('Falha na requisição');
+    return res.json();
+  }
   return {
-    list: () => fetch(`/api/${resource}`).then(r=>{ if(!r.ok) throw new Error('Falha ao carregar '+resource); return r.json(); }),
-    create: (body) => fetch(`/api/${resource}`, { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(body) }).then(r=>{ if(!r.ok) throw new Error('Falha ao salvar'); return r.json(); }),
-    update: (id, body) => fetch(`/api/${resource}?id=${id}`, { method:'PUT', headers:{'Content-Type':'application/json'}, body: JSON.stringify(body) }).then(r=>{ if(!r.ok) throw new Error('Falha ao atualizar'); return r.json(); }),
-    remove: (id) => fetch(`/api/${resource}?id=${id}`, { method:'DELETE' }).then(r=>{ if(!r.ok) throw new Error('Falha ao remover'); return r.json(); }),
+    list: () => fetch(`/api/${resource}`, { headers: authHeaders() }).then(handle),
+    create: (body) => fetch(`/api/${resource}`, { method:'POST', headers: authHeaders(), body: JSON.stringify(body) }).then(handle),
+    update: (id, body) => fetch(`/api/${resource}?id=${id}`, { method:'PUT', headers: authHeaders(), body: JSON.stringify(body) }).then(handle),
+    remove: (id) => fetch(`/api/${resource}?id=${id}`, { method:'DELETE', headers: authHeaders() }).then(handle),
   };
 }
 
-let state = { clientes: [], contratos: [], funcionarios: [], visitas: [], financeiro: [] };
+let state = { clientes: [], contratos: [], funcionarios: [], visitas: [], financeiro: [], comercial: [] };
+const editIds = { cliente:null, contrato:null, funcionario:null, visita:null, financeiro:null, lead:null };
+const LEAD_STAGES = ['Novo Lead','Qualificação','Proposta Enviada','Negociação','Fechado - Ganho','Fechado - Perdido'];
 
 function toast(msg, isErr){
   const t = document.getElementById('toast');
@@ -432,28 +631,28 @@ function toast(msg, isErr){
   t.className = isErr ? 'show err' : 'show';
   setTimeout(()=>{ t.className=''; }, 2600);
 }
+function escJs(str){ return String(str==null?'':str).replace(/\\/g,'\\\\').replace(/'/g,"\\'"); }
+function esc(str){ return String(str==null?'':str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+function jattr(obj){ return JSON.stringify(obj).replace(/'/g,'&#39;'); }
 
 /* ========================= BOOT / SEED ========================= */
-const seedClientes = [
-  { nome:'Ed. MYLENA', sindica:'Letícia', endereco:'Praia Grande/SP' }
-];
+const seedClientes = [ { nome:'Ed. MYLENA', sindica:'Letícia', endereco:'Praia Grande/SP', driveLink:'' } ];
 const seedContratosFor = (clienteNome, clienteId) => ({
   clienteNome, clienteId, status:'Assinado', plataforma:'Clicksign', dataEnvio:'', dataAssinatura:'', link:''
 });
 const seedFuncionariosFor = (clienteNome) => ([
-  { nome:'Evandro', cargo:'Zelador', condominioNome:clienteNome, folga:'Quarta', etapa:5 },
-  { nome:'Julhyana', cargo:'ASG', condominioNome:clienteNome, folga:'Terça', etapa:5 }
+  { nome:'Evandro', cargo:'Zelador', condominioNome:clienteNome, folga:'Quarta', etapa:5, status:'Ativo', driveLink:'' },
+  { nome:'Julhyana', cargo:'ASG', condominioNome:clienteNome, folga:'Terça', etapa:5, status:'Ativo', driveLink:'' }
 ]);
 
 async function loadState(){
   try{
-    const [clientes, contratos, funcionarios, visitas, financeiro] = await Promise.all([
-      api('clientes').list(), api('contratos').list(), api('funcionarios').list(), api('visitas').list(), api('financeiro').list()
+    const [clientes, contratos, funcionarios, visitas, financeiro, comercial] = await Promise.all([
+      api('clientes').list(), api('contratos').list(), api('funcionarios').list(), api('visitas').list(), api('financeiro').list(), api('comercial').list()
     ]);
-    state = { clientes, contratos, funcionarios, visitas, financeiro };
+    state = { clientes, contratos, funcionarios, visitas, financeiro, comercial };
 
     if(state.clientes.length === 0){
-      // primeira execução: popular com os dados já conhecidos da operação
       const created = await api('clientes').create(seedClientes[0]);
       state.clientes.push(created);
       const contrato = await api('contratos').create(seedContratosFor(created.nome, created.id));
@@ -467,24 +666,48 @@ async function loadState(){
   }catch(e){
     const box = document.getElementById('bootError');
     box.style.display = 'block';
-    box.innerHTML = `<b>Não foi possível conectar à API.</b><br>Isso é esperado se você estiver abrindo este arquivo direto no navegador — o backend (Netlify Functions) só funciona quando o site está publicado no Netlify (ou rodando via <code>netlify dev</code> localmente). Veja o README do projeto para o passo a passo de deploy.`;
+    box.innerHTML = `<b>Não foi possível conectar à API.</b><br>Isso é esperado se você estiver abrindo este arquivo direto no navegador — o backend (Netlify Functions) só funciona quando o site está publicado no Netlify (ou rodando via <code>netlify dev</code> localmente).`;
     console.error(e);
   }
   renderAll();
 }
 
-/* ========================= NAV ========================= */
-function goToTab(tab){
+/* ========================= NAV (com suporte ao botão voltar do navegador) ========================= */
+const VALID_TABS = ['dashboard','comercial','clientes','contratos','funcionarios','supervisao','financeiro'];
+
+function showTab(tab){
   document.querySelectorAll('.nav-item').forEach(n=>n.classList.toggle('active', n.dataset.tab===tab));
   document.querySelectorAll('.tab-view').forEach(v=>v.classList.remove('active'));
   document.getElementById('view-'+tab).classList.add('active');
   window.scrollTo({top:0, behavior:'smooth'});
+  closeMobileSidebar();
 }
+function goToTab(tab){
+  if(!VALID_TABS.includes(tab)) tab = 'dashboard';
+  showTab(tab);
+  if(location.hash !== '#'+tab){
+    history.pushState({ tab }, '', '#'+tab);
+  }
+}
+window.addEventListener('popstate', (e)=>{
+  const tab = (e.state && e.state.tab) || (location.hash ? location.hash.slice(1) : 'dashboard');
+  showTab(VALID_TABS.includes(tab) ? tab : 'dashboard');
+});
 document.getElementById('nav').addEventListener('click', (e)=>{
   const item = e.target.closest('.nav-item');
   if(!item) return;
   goToTab(item.dataset.tab);
 });
+
+/* ========================= MENU MOBILE ========================= */
+function toggleMobileSidebar(){
+  document.getElementById('sidebar').classList.toggle('open');
+  document.getElementById('sidebarOverlay').classList.toggle('show');
+}
+function closeMobileSidebar(){
+  document.getElementById('sidebar').classList.remove('open');
+  document.getElementById('sidebarOverlay').classList.remove('show');
+}
 
 function closeModal(id){ document.getElementById(id).classList.remove('open'); }
 function openModal(id){ document.getElementById(id).classList.add('open'); }
@@ -493,28 +716,43 @@ function setBusy(btnId, busy, labelBusy, labelIdle){
   b.disabled = busy;
   b.textContent = busy ? labelBusy : labelIdle;
 }
+function driveLinkHtml(url){
+  if(url) return `<a class="drive-link" href="${esc(url)}" target="_blank">🔗 Abrir Drive</a>`;
+  return `<span class="drive-link disabled">🔗 Sem link</span>`;
+}
 
 /* ========================= TOP BAR DATE ========================= */
 document.getElementById('todayPill').textContent = new Date().toLocaleDateString('pt-BR',{weekday:'long', day:'2-digit', month:'long'});
 
 /* ========================= CLIENTES ========================= */
-function openClienteModal(){
-  document.getElementById('c_nome').value='';
-  document.getElementById('c_sindica').value='';
-  document.getElementById('c_endereco').value='';
+function openClienteModal(existing){
+  editIds.cliente = existing ? existing.id : null;
+  document.getElementById('c_titulo').textContent = existing ? '🏢 Editar cliente' : '🏢 Novo cliente';
+  document.getElementById('c_nome').value = existing ? existing.nome : '';
+  document.getElementById('c_sindica').value = existing ? existing.sindica||'' : '';
+  document.getElementById('c_endereco').value = existing ? existing.endereco||'' : '';
+  document.getElementById('c_drivelink').value = existing ? existing.driveLink||'' : '';
   openModal('modalCliente');
 }
 async function saveCliente(){
   const nome = document.getElementById('c_nome').value.trim();
   if(!nome){ alert('Informe o nome do condomínio.'); return; }
+  const body = {
+    nome,
+    sindica: document.getElementById('c_sindica').value.trim(),
+    endereco: document.getElementById('c_endereco').value.trim(),
+    driveLink: document.getElementById('c_drivelink').value.trim()
+  };
   setBusy('c_saveBtn', true, 'Salvando...', 'Salvar');
   try{
-    const created = await api('clientes').create({
-      nome,
-      sindica: document.getElementById('c_sindica').value.trim(),
-      endereco: document.getElementById('c_endereco').value.trim()
-    });
-    state.clientes.push(created);
+    if(editIds.cliente){
+      const updated = await api('clientes').update(editIds.cliente, body);
+      const idx = state.clientes.findIndex(c=>c.id===editIds.cliente);
+      state.clientes[idx] = updated;
+    }else{
+      const created = await api('clientes').create(body);
+      state.clientes.push(created);
+    }
     closeModal('modalCliente'); renderAll();
     toast('Cliente salvo.');
   }catch(e){ toast('Erro ao salvar cliente.', true); }
@@ -529,7 +767,7 @@ async function deleteCliente(id){
   }catch(e){ toast('Erro ao remover cliente.', true); }
 }
 function statusBadge(status){
-  const map = {Assinado:'badge-green', Enviado:'badge-amber', Rascunho:'badge-gray'};
+  const map = {Assinado:'badge-green', 'Assinado fisicamente':'badge-blue', Enviado:'badge-amber', Rascunho:'badge-gray'};
   return `<span class="badge ${map[status]||'badge-gray'}">${status||'Sem contrato'}</span>`;
 }
 function contratoDoCliente(clienteId, clienteNome){
@@ -546,42 +784,57 @@ function renderClientes(){
     const contrato = contratoDoCliente(c.id, c.nome);
     return `
     <div class="card client-card">
-      <button class="icon-btn" style="position:absolute;top:14px;right:14px" onclick="deleteCliente('${c.id}')">✕</button>
-      <h3>${c.nome}</h3>
-      <div class="sindica">Síndica(o): ${c.sindica||'—'}</div>
-      <div class="addr">${c.endereco||'Endereço não informado'}</div>
+      <div class="card-actions">
+        <button class="icon-btn edit" onclick='openClienteModal(${jattr(c)})' title="Editar">✎</button>
+        <button class="icon-btn" onclick="deleteCliente('${c.id}')" title="Remover">✕</button>
+      </div>
+      <h3>${esc(c.nome)}</h3>
+      <div class="sindica">Síndica(o): ${esc(c.sindica)||'—'}</div>
+      <div class="addr">${esc(c.endereco)||'Endereço não informado'}</div>
       <div class="row">
         ${statusBadge(contrato ? contrato.status : null)}
         <span class="badge badge-blue">${nFunc} funcionário(s)</span>
       </div>
+      <div class="row">${driveLinkHtml(c.driveLink)}</div>
     </div>`;
   }).join('');
 }
 
 /* ========================= CONTRATOS ========================= */
-function openContratoModal(){
+function openContratoModal(existing){
   fillCondominioSelects();
-  document.getElementById('ct_dataEnvio').value='';
-  document.getElementById('ct_dataAssinatura').value='';
-  document.getElementById('ct_link').value='';
+  editIds.contrato = existing ? existing.id : null;
+  document.getElementById('ct_titulo').textContent = existing ? '📄 Editar contrato' : '📄 Novo contrato';
+  document.getElementById('ct_cliente').value = existing ? existing.clienteNome : (document.getElementById('ct_cliente').value);
+  document.getElementById('ct_status').value = existing ? existing.status : 'Assinado';
+  document.getElementById('ct_plataforma').value = existing ? existing.plataforma : 'Clicksign';
+  document.getElementById('ct_dataEnvio').value = existing ? existing.dataEnvio||'' : '';
+  document.getElementById('ct_dataAssinatura').value = existing ? existing.dataAssinatura||'' : '';
+  document.getElementById('ct_link').value = existing ? existing.link||'' : '';
   openModal('modalContrato');
 }
 async function saveContrato(){
-  const sel = document.getElementById('ct_cliente');
-  const clienteNome = sel.value;
+  const clienteNome = document.getElementById('ct_cliente').value;
   if(!clienteNome){ alert('Cadastre um cliente antes de criar o contrato.'); return; }
   const cliente = state.clientes.find(c=>c.nome===clienteNome);
+  const body = {
+    clienteNome, clienteId: cliente ? cliente.id : null,
+    status: document.getElementById('ct_status').value,
+    plataforma: document.getElementById('ct_plataforma').value,
+    dataEnvio: document.getElementById('ct_dataEnvio').value,
+    dataAssinatura: document.getElementById('ct_dataAssinatura').value,
+    link: document.getElementById('ct_link').value.trim()
+  };
   setBusy('ct_saveBtn', true, 'Salvando...', 'Salvar');
   try{
-    const created = await api('contratos').create({
-      clienteNome, clienteId: cliente ? cliente.id : null,
-      status: document.getElementById('ct_status').value,
-      plataforma: document.getElementById('ct_plataforma').value,
-      dataEnvio: document.getElementById('ct_dataEnvio').value,
-      dataAssinatura: document.getElementById('ct_dataAssinatura').value,
-      link: document.getElementById('ct_link').value.trim()
-    });
-    state.contratos.push(created);
+    if(editIds.contrato){
+      const updated = await api('contratos').update(editIds.contrato, body);
+      const idx = state.contratos.findIndex(c=>c.id===editIds.contrato);
+      state.contratos[idx] = updated;
+    }else{
+      const created = await api('contratos').create(body);
+      state.contratos.push(created);
+    }
     closeModal('modalContrato'); renderAll();
     toast('Contrato salvo.');
   }catch(e){ toast('Erro ao salvar contrato.', true); }
@@ -603,14 +856,17 @@ function renderContratos(){
   }
   grid.innerHTML = state.contratos.map(c=>`
     <div class="card contrato-card">
-      <button class="icon-btn" style="position:absolute;top:14px;right:14px" onclick="deleteContrato('${c.id}')">✕</button>
-      <h3>${c.clienteNome}</h3>
-      <div class="meta-row">Plataforma: ${c.plataforma}</div>
+      <div class="card-actions">
+        <button class="icon-btn edit" onclick='openContratoModal(${jattr(c)})' title="Editar">✎</button>
+        <button class="icon-btn" onclick="deleteContrato('${c.id}')" title="Remover">✕</button>
+      </div>
+      <h3>${esc(c.clienteNome)}</h3>
+      <div class="meta-row">Plataforma: ${esc(c.plataforma)}</div>
       <div class="meta-row">Envio: ${c.dataEnvio ? new Date(c.dataEnvio+'T12:00:00').toLocaleDateString('pt-BR') : '—'}</div>
       <div class="meta-row">Assinatura: ${c.dataAssinatura ? new Date(c.dataAssinatura+'T12:00:00').toLocaleDateString('pt-BR') : '—'}</div>
       <div class="row">
         ${statusBadge(c.status)}
-        ${c.link ? `<a href="${c.link}" target="_blank" class="btn btn-ghost" style="text-decoration:none">Abrir documento</a>` : ''}
+        ${driveLinkHtml(c.link)}
       </div>
     </div>`).join('');
 }
@@ -618,28 +874,56 @@ function renderContratos(){
 /* ========================= FUNCIONARIOS ========================= */
 const etapas = ['Documentos','Contabilidade','ASO','Reunião','Drive','Tique Taque'];
 function fillCondominioSelects(){
-  const opts = state.clientes.map(c=>`<option value="${c.nome}">${c.nome}</option>`).join('');
+  const opts = state.clientes.map(c=>`<option value="${esc(c.nome)}">${esc(c.nome)}</option>`).join('');
   ['f_condominio','v_condominio','ct_cliente'].forEach(id=>{ document.getElementById(id).innerHTML = opts || '<option value="">Nenhum cliente cadastrado</option>'; });
   document.getElementById('ff_condominio').innerHTML = '<option value="">—</option>' + opts;
 }
-function openFuncModal(){
+function toggleAfastamentoFields(){
+  const status = document.getElementById('f_status').value;
+  document.getElementById('f_afastamentoBlock').style.display = status==='Afastado' ? 'block' : 'none';
+}
+function openFuncModal(existing){
   fillCondominioSelects();
-  document.getElementById('f_nome').value='';
+  editIds.funcionario = existing ? existing.id : null;
+  document.getElementById('f_titulo').textContent = existing ? '👷 Editar funcionário' : '👷 Novo funcionário';
+  document.getElementById('f_nome').value = existing ? existing.nome : '';
+  document.getElementById('f_cargo').value = existing ? existing.cargo : 'Zelador';
+  if(existing) document.getElementById('f_condominio').value = existing.condominioNome;
+  document.getElementById('f_folga').value = existing ? existing.folga : 'Quarta';
+  document.getElementById('f_etapa').value = existing ? existing.etapa : 5;
+  document.getElementById('f_status').value = existing ? (existing.status||'Ativo') : 'Ativo';
+  document.getElementById('f_dataInicio').value = existing ? existing.dataInicioAfastamento||'' : '';
+  document.getElementById('f_dataRetorno').value = existing ? existing.dataRetornoPrevista||'' : '';
+  document.getElementById('f_driveLinkAfastamento').value = existing ? existing.driveLinkAfastamento||'' : '';
+  document.getElementById('f_driveLink').value = existing ? existing.driveLink||'' : '';
+  toggleAfastamentoFields();
   openModal('modalFunc');
 }
 async function saveFunc(){
   const nome = document.getElementById('f_nome').value.trim();
   if(!nome){ alert('Informe o nome do funcionário.'); return; }
+  const body = {
+    nome,
+    cargo: document.getElementById('f_cargo').value,
+    condominioNome: document.getElementById('f_condominio').value,
+    folga: document.getElementById('f_folga').value,
+    etapa: parseInt(document.getElementById('f_etapa').value),
+    status: document.getElementById('f_status').value,
+    dataInicioAfastamento: document.getElementById('f_dataInicio').value,
+    dataRetornoPrevista: document.getElementById('f_dataRetorno').value,
+    driveLinkAfastamento: document.getElementById('f_driveLinkAfastamento').value.trim(),
+    driveLink: document.getElementById('f_driveLink').value.trim()
+  };
   setBusy('f_saveBtn', true, 'Salvando...', 'Salvar');
   try{
-    const created = await api('funcionarios').create({
-      nome,
-      cargo: document.getElementById('f_cargo').value,
-      condominioNome: document.getElementById('f_condominio').value,
-      folga: document.getElementById('f_folga').value,
-      etapa: parseInt(document.getElementById('f_etapa').value)
-    });
-    state.funcionarios.push(created);
+    if(editIds.funcionario){
+      const updated = await api('funcionarios').update(editIds.funcionario, body);
+      const idx = state.funcionarios.findIndex(f=>f.id===editIds.funcionario);
+      state.funcionarios[idx] = updated;
+    }else{
+      const created = await api('funcionarios').create(body);
+      state.funcionarios.push(created);
+    }
     closeModal('modalFunc'); renderAll();
     toast('Funcionário salvo.');
   }catch(e){ toast('Erro ao salvar funcionário.', true); }
@@ -656,9 +940,8 @@ async function deleteFunc(id){
 async function advanceEtapa(id){
   const f = state.funcionarios.find(x=>x.id===id);
   if(!f || f.etapa >= 5) return;
-  const novaEtapa = f.etapa + 1;
   try{
-    const updated = await api('funcionarios').update(id, { etapa: novaEtapa });
+    const updated = await api('funcionarios').update(id, { etapa: f.etapa + 1 });
     Object.assign(f, updated);
     renderAll();
   }catch(e){ toast('Erro ao atualizar etapa.', true); }
@@ -673,6 +956,10 @@ function stepperHtml(etapa){
   html += '</div>';
   return html;
 }
+function statusFuncBadge(status){
+  const map = {Ativo:'badge-green', Afastado:'badge-amber', Desligado:'badge-red'};
+  return `<span class="badge ${map[status]||'badge-gray'}">${status||'Ativo'}</span>`;
+}
 function renderFuncionarios(){
   const table = document.getElementById('funcTable');
   if(state.funcionarios.length===0){
@@ -680,21 +967,24 @@ function renderFuncionarios(){
     return;
   }
   table.innerHTML = `
-    <tr><th>Nome</th><th>Cargo</th><th>Condomínio</th><th>Folga</th><th>Admissão</th><th></th></tr>
+    <tr><th>Nome</th><th>Cargo</th><th>Condomínio</th><th>Folga</th><th>Status</th><th>Admissão</th><th>Drive</th><th></th></tr>
     ${state.funcionarios.map(f=>`
       <tr>
-        <td><b>${f.nome}</b></td>
-        <td>${f.cargo}</td>
-        <td>${f.condominioNome||'—'}</td>
-        <td><span class="badge badge-blue">${f.folga}</span></td>
+        <td><b>${esc(f.nome)}</b></td>
+        <td>${esc(f.cargo)}</td>
+        <td>${esc(f.condominioNome)||'—'}</td>
+        <td><span class="badge badge-blue">${esc(f.folga)}</span></td>
+        <td>${statusFuncBadge(f.status)}${f.status==='Afastado' && f.dataRetornoPrevista ? `<div style="font-size:10px;color:var(--gray-600);margin-top:3px">Retorno: ${new Date(f.dataRetornoPrevista+'T12:00:00').toLocaleDateString('pt-BR')}</div>` : ''}</td>
         <td>
           ${stepperHtml(f.etapa)}
           <div style="font-size:10.5px;color:var(--gray-600);margin-top:3px">
             ${f.etapa>=5?'Concluído':'Etapa: '+etapas[f.etapa]}
           </div>
         </td>
+        <td>${driveLinkHtml(f.driveLink)}</td>
         <td style="white-space:nowrap">
-          ${f.etapa<5?`<button class="icon-btn" style="color:var(--green)" onclick="advanceEtapa('${f.id}')" title="Avançar etapa">➜</button>`:''}
+          ${f.etapa<5?`<button class="icon-btn edit" style="color:var(--green)" onclick="advanceEtapa('${f.id}')" title="Avançar etapa">➜</button>`:''}
+          <button class="icon-btn edit" onclick='openFuncModal(${jattr(f)})' title="Editar">✎</button>
           <button class="icon-btn" onclick="deleteFunc('${f.id}')" title="Remover">✕</button>
         </td>
       </tr>`).join('')}
@@ -702,28 +992,42 @@ function renderFuncionarios(){
 }
 
 /* ========================= SUPERVISAO ========================= */
-function openVisitaModal(){
+function openVisitaModal(existing){
   fillCondominioSelects();
-  document.getElementById('v_data').value = new Date().toISOString().slice(0,10);
-  document.getElementById('v_obs').value='';
+  editIds.visita = existing ? existing.id : null;
+  document.getElementById('v_titulo').textContent = existing ? '📋 Editar visita' : '📋 Agendar visita';
+  document.getElementById('v_data').value = existing ? existing.data : new Date().toISOString().slice(0,10);
+  if(existing) document.getElementById('v_condominio').value = existing.condominioNome;
+  document.getElementById('v_responsavel').value = existing ? existing.responsavel : 'Alexandre';
+  document.getElementById('v_status').value = existing ? existing.status : 'Pendente';
+  document.getElementById('v_obs').value = existing ? existing.obs||'' : '';
+  document.getElementById('v_driveLink').value = existing ? existing.driveLink||'' : '';
   openModal('modalVisita');
 }
 async function saveVisita(){
   const data = document.getElementById('v_data').value;
   if(!data){ alert('Informe a data.'); return; }
+  const body = {
+    data,
+    condominioNome: document.getElementById('v_condominio').value,
+    responsavel: document.getElementById('v_responsavel').value.trim(),
+    status: document.getElementById('v_status').value,
+    obs: document.getElementById('v_obs').value.trim(),
+    driveLink: document.getElementById('v_driveLink').value.trim()
+  };
   setBusy('v_saveBtn', true, 'Salvando...', 'Salvar');
   try{
-    const created = await api('visitas').create({
-      data,
-      condominioNome: document.getElementById('v_condominio').value,
-      responsavel: document.getElementById('v_responsavel').value.trim(),
-      status: document.getElementById('v_status').value,
-      obs: document.getElementById('v_obs').value.trim()
-    });
-    state.visitas.push(created);
+    if(editIds.visita){
+      const updated = await api('visitas').update(editIds.visita, body);
+      const idx = state.visitas.findIndex(v=>v.id===editIds.visita);
+      state.visitas[idx] = updated;
+    }else{
+      const created = await api('visitas').create(body);
+      state.visitas.push(created);
+    }
     closeModal('modalVisita'); renderAll();
-    toast('Visita agendada.');
-  }catch(e){ toast('Erro ao agendar visita.', true); }
+    toast('Visita salva.');
+  }catch(e){ toast('Erro ao salvar visita.', true); }
   setBusy('v_saveBtn', false, 'Salvando...', 'Salvar');
 }
 async function toggleVisita(id){
@@ -761,11 +1065,13 @@ function renderSupervisao(){
         <div class="m">${monthsShort[d.getMonth()]}</div>
       </div>
       <div class="visit-info">
-        <b>${v.condominioNome||'—'}</b>
-        <div class="meta">Responsável: ${v.responsavel||'—'}${v.obs? ' · '+v.obs:''}</div>
+        <b>${esc(v.condominioNome)||'—'}</b>
+        <div class="meta">Responsável: ${esc(v.responsavel)||'—'}${v.obs? ' · '+esc(v.obs):''}</div>
       </div>
+      ${driveLinkHtml(v.driveLink)}
       <div style="display:flex;align-items:center;gap:10px">
         <span class="badge ${v.status==='Realizada'?'badge-green':'badge-amber'}" style="cursor:pointer" onclick="toggleVisita('${v.id}')">${v.status}</span>
+        <button class="icon-btn edit" onclick='openVisitaModal(${jattr(v)})' title="Editar">✎</button>
         <button class="icon-btn" onclick="deleteVisita('${v.id}')">✕</button>
       </div>
     </div>`;
@@ -773,26 +1079,37 @@ function renderSupervisao(){
 }
 
 /* ========================= FINANCEIRO ========================= */
-function openFinModal(){
+function openFinModal(existing){
   fillCondominioSelects();
-  document.getElementById('ff_data').value = new Date().toISOString().slice(0,10);
-  document.getElementById('ff_categoria').value='';
-  document.getElementById('ff_valor').value='';
+  editIds.financeiro = existing ? existing.id : null;
+  document.getElementById('ff_titulo').textContent = existing ? '💰 Editar lançamento' : '💰 Novo lançamento';
+  document.getElementById('ff_tipo').value = existing ? existing.tipo : 'Receita';
+  document.getElementById('ff_data').value = existing ? existing.data : new Date().toISOString().slice(0,10);
+  document.getElementById('ff_categoria').value = existing ? existing.categoria : '';
+  document.getElementById('ff_valor').value = existing ? existing.valor : '';
+  if(existing) document.getElementById('ff_condominio').value = existing.condominioNome||'';
   openModal('modalFin');
 }
 async function saveFin(){
   const valor = parseFloat(document.getElementById('ff_valor').value);
   if(!valor || valor<=0){ alert('Informe um valor válido.'); return; }
+  const body = {
+    tipo: document.getElementById('ff_tipo').value,
+    data: document.getElementById('ff_data').value,
+    categoria: document.getElementById('ff_categoria').value.trim() || 'Sem categoria',
+    valor,
+    condominioNome: document.getElementById('ff_condominio').value
+  };
   setBusy('ff_saveBtn', true, 'Salvando...', 'Salvar');
   try{
-    const created = await api('financeiro').create({
-      tipo: document.getElementById('ff_tipo').value,
-      data: document.getElementById('ff_data').value,
-      categoria: document.getElementById('ff_categoria').value.trim() || 'Sem categoria',
-      valor,
-      condominioNome: document.getElementById('ff_condominio').value
-    });
-    state.financeiro.push(created);
+    if(editIds.financeiro){
+      const updated = await api('financeiro').update(editIds.financeiro, body);
+      const idx = state.financeiro.findIndex(f=>f.id===editIds.financeiro);
+      state.financeiro[idx] = updated;
+    }else{
+      const created = await api('financeiro').create(body);
+      state.financeiro.push(created);
+    }
     closeModal('modalFin'); renderAll();
     toast('Lançamento salvo.');
   }catch(e){ toast('Erro ao salvar lançamento.', true); }
@@ -806,7 +1123,7 @@ async function deleteFin(id){
     renderAll(); toast('Lançamento removido.');
   }catch(e){ toast('Erro ao remover lançamento.', true); }
 }
-function brl(v){ return v.toLocaleString('pt-BR',{style:'currency',currency:'BRL'}); }
+function brl(v){ return (v||0).toLocaleString('pt-BR',{style:'currency',currency:'BRL'}); }
 function renderFinanceiro(){
   const receitas = state.financeiro.filter(f=>f.tipo==='Receita').reduce((s,f)=>s+f.valor,0);
   const despesas = state.financeiro.filter(f=>f.tipo==='Despesa').reduce((s,f)=>s+f.valor,0);
@@ -827,23 +1144,129 @@ function renderFinanceiro(){
     ${sorted.map(f=>`
       <tr>
         <td>${new Date(f.data+'T12:00:00').toLocaleDateString('pt-BR')}</td>
-        <td>${f.categoria}</td>
-        <td>${f.condominioNome||'—'}</td>
+        <td>${esc(f.categoria)}</td>
+        <td>${esc(f.condominioNome)||'—'}</td>
         <td><span class="badge ${f.tipo==='Receita'?'badge-green':'badge-red'}">${f.tipo}</span></td>
         <td class="${f.tipo==='Receita'?'amount-in':'amount-out'}">${f.tipo==='Receita'?'+':'-'} ${brl(f.valor)}</td>
-        <td><button class="icon-btn" onclick="deleteFin('${f.id}')">✕</button></td>
+        <td style="white-space:nowrap">
+          <button class="icon-btn edit" onclick='openFinModal(${jattr(f)})' title="Editar">✎</button>
+          <button class="icon-btn" onclick="deleteFin('${f.id}')">✕</button>
+        </td>
       </tr>`).join('')}
   `;
+}
+
+/* ========================= COMERCIAL (kanban) ========================= */
+function openLeadModal(existing){
+  const sel = document.getElementById('lead_stage');
+  sel.innerHTML = LEAD_STAGES.map(s=>`<option value="${s}">${s}</option>`).join('');
+  editIds.lead = existing ? existing.id : null;
+  document.getElementById('lead_titulo').textContent = existing ? '🎯 Editar lead' : '🎯 Novo lead';
+  document.getElementById('lead_nome').value = existing ? existing.nome : '';
+  document.getElementById('lead_contato').value = existing ? existing.contato||'' : '';
+  document.getElementById('lead_telefone').value = existing ? existing.telefone||'' : '';
+  document.getElementById('lead_valor').value = existing ? existing.valorEstimado||'' : '';
+  document.getElementById('lead_origem').value = existing ? existing.origem : 'Indicação';
+  document.getElementById('lead_responsavel').value = existing ? existing.responsavel : 'Alexandre';
+  sel.value = existing ? existing.stage : LEAD_STAGES[0];
+  document.getElementById('lead_obs').value = existing ? existing.obs||'' : '';
+  openModal('modalLead');
+}
+async function saveLead(){
+  const nome = document.getElementById('lead_nome').value.trim();
+  if(!nome){ alert('Informe o nome do lead.'); return; }
+  const body = {
+    nome,
+    contato: document.getElementById('lead_contato').value.trim(),
+    telefone: document.getElementById('lead_telefone').value.trim(),
+    valorEstimado: parseFloat(document.getElementById('lead_valor').value) || 0,
+    origem: document.getElementById('lead_origem').value,
+    responsavel: document.getElementById('lead_responsavel').value.trim(),
+    stage: document.getElementById('lead_stage').value,
+    obs: document.getElementById('lead_obs').value.trim()
+  };
+  setBusy('lead_saveBtn', true, 'Salvando...', 'Salvar');
+  try{
+    if(editIds.lead){
+      const updated = await api('comercial').update(editIds.lead, body);
+      const idx = state.comercial.findIndex(l=>l.id===editIds.lead);
+      state.comercial[idx] = updated;
+    }else{
+      const created = await api('comercial').create(body);
+      state.comercial.push(created);
+    }
+    closeModal('modalLead'); renderComercial();
+    toast('Lead salvo.');
+  }catch(e){ toast('Erro ao salvar lead.', true); }
+  setBusy('lead_saveBtn', false, 'Salvando...', 'Salvar');
+}
+async function deleteLead(id){
+  if(!confirm('Remover este lead?')) return;
+  try{
+    await api('comercial').remove(id);
+    state.comercial = state.comercial.filter(l=>l.id!==id);
+    renderComercial(); toast('Lead removido.');
+  }catch(e){ toast('Erro ao remover lead.', true); }
+}
+async function moveLead(id, newStage){
+  const lead = state.comercial.find(l=>l.id===id);
+  if(!lead || newStage===lead.stage) return;
+  try{
+    const updated = await api('comercial').update(id, { stage: newStage });
+    Object.assign(lead, updated);
+    renderComercial();
+  }catch(e){ toast('Erro ao mover lead.', true); }
+}
+function moveLeadStep(id, dir){
+  const lead = state.comercial.find(l=>l.id===id);
+  if(!lead) return;
+  const idx = LEAD_STAGES.indexOf(lead.stage);
+  const newIdx = idx + dir;
+  if(newIdx<0 || newIdx>=LEAD_STAGES.length) return;
+  moveLead(id, LEAD_STAGES[newIdx]);
+}
+let dragLeadId = null;
+function renderComercial(){
+  const board = document.getElementById('kanbanBoard');
+  board.innerHTML = LEAD_STAGES.map((stage, colIdx) => {
+    const leads = state.comercial.filter(l=>l.stage===stage);
+    const cards = leads.map(l => {
+      const idx = LEAD_STAGES.indexOf(l.stage);
+      return `
+      <div class="lead-card" draggable="true"
+           ondragstart="dragLeadId='${l.id}'"
+           title="Arraste para outra etapa">
+        <b>${esc(l.nome)}</b>
+        ${l.contato ? `<div class="meta">${esc(l.contato)}${l.telefone? ' · '+esc(l.telefone):''}</div>` : ''}
+        <div class="meta">${esc(l.origem)||'—'} · ${esc(l.responsavel)||'—'}</div>
+        ${l.valorEstimado ? `<span class="valor">${brl(l.valorEstimado)}/mês</span>` : ''}
+        <div class="lead-actions">
+          <div class="lead-move">
+            <button ${idx<=0?'disabled':''} onclick="moveLeadStep('${l.id}',-1)" title="Etapa anterior">◀</button>
+            <button ${idx>=LEAD_STAGES.length-1?'disabled':''} onclick="moveLeadStep('${l.id}',1)" title="Próxima etapa">▶</button>
+          </div>
+          <div class="lead-icons">
+            <button class="icon-btn edit" onclick='openLeadModal(${jattr(l)})' title="Editar">✎</button>
+            <button class="icon-btn" onclick="deleteLead('${l.id}')" title="Remover">✕</button>
+          </div>
+        </div>
+      </div>`;
+    }).join('');
+    return `
+    <div class="kanban-col" ondragover="event.preventDefault();this.classList.add('drag-over')" ondragleave="this.classList.remove('drag-over')" ondrop="this.classList.remove('drag-over');moveLead(dragLeadId,'${stage}')">
+      <h4>${stage} <span class="count">${leads.length}</span></h4>
+      <div class="kanban-cards">${cards || '<p style="color:var(--gray-600);font-size:11.5px;text-align:center;padding:10px 0">Vazio</p>'}</div>
+    </div>`;
+  }).join('');
 }
 
 /* ========================= DASHBOARD ========================= */
 function renderDashboard(){
   const clientesAtivos = state.clientes.length;
-  const funcAtivos = state.funcionarios.length;
+  const funcAtivos = state.funcionarios.filter(f=>(f.status||'Ativo')!=='Desligado').length;
   const visitasPendentes = state.visitas.filter(v=>v.status==='Pendente').length;
   const receitas = state.financeiro.filter(f=>f.tipo==='Receita').reduce((s,f)=>s+f.valor,0);
   const despesas = state.financeiro.filter(f=>f.tipo==='Despesa').reduce((s,f)=>s+f.valor,0);
-  const contratosPendentes = state.contratos.filter(c=>c.status!=='Assinado').length;
 
   document.getElementById('kpiGrid').innerHTML = `
     <div class="card kpi clickable-card" onclick="goToTab('clientes')"><div class="label">Clientes ativos</div><div class="value">${clientesAtivos}</div><div class="sub">Condomínios atendidos</div></div>
@@ -854,17 +1277,17 @@ function renderDashboard(){
 
   const proxVisitas = [...state.visitas].filter(v=>v.status==='Pendente').sort((a,b)=>a.data.localeCompare(b.data)).slice(0,4);
   document.getElementById('dashVisitas').innerHTML = proxVisitas.length ? proxVisitas.map(v=>`
-    <div class="list-row"><div><b>${v.condominioNome||'—'}</b><div class="meta">${new Date(v.data+'T12:00:00').toLocaleDateString('pt-BR')} · ${v.responsavel||'—'}</div></div><span class="badge badge-amber">Pendente</span></div>
+    <div class="list-row"><div><b>${esc(v.condominioNome)||'—'}</b><div class="meta">${new Date(v.data+'T12:00:00').toLocaleDateString('pt-BR')} · ${esc(v.responsavel)||'—'}</div></div><span class="badge badge-amber">Pendente</span></div>
   `).join('') : `<p style="color:var(--gray-600);font-size:13px;margin:0">Nenhuma visita pendente.</p>`;
 
   const admissoes = state.funcionarios.filter(f=>f.etapa<5);
   document.getElementById('dashAdmissoes').innerHTML = admissoes.length ? admissoes.map(f=>`
-    <div class="list-row"><div><b>${f.nome}</b><div class="meta">${f.cargo} · ${f.condominioNome||'—'}</div></div><span class="badge badge-amber">${etapas[f.etapa]}</span></div>
+    <div class="list-row"><div><b>${esc(f.nome)}</b><div class="meta">${esc(f.cargo)} · ${esc(f.condominioNome)||'—'}</div></div><span class="badge badge-amber">${etapas[f.etapa]}</span></div>
   `).join('') : `<p style="color:var(--gray-600);font-size:13px;margin:0">Todas as admissões concluídas.</p>`;
 
-  const pendentesContrato = state.contratos.filter(c=>c.status!=='Assinado');
+  const pendentesContrato = state.contratos.filter(c=>c.status!=='Assinado' && c.status!=='Assinado fisicamente');
   document.getElementById('dashContratos').innerHTML = pendentesContrato.length ? pendentesContrato.map(c=>`
-    <div class="list-row"><div><b>${c.clienteNome}</b><div class="meta">${c.plataforma}</div></div>${statusBadge(c.status)}</div>
+    <div class="list-row"><div><b>${esc(c.clienteNome)}</b><div class="meta">${esc(c.plataforma)}</div></div>${statusBadge(c.status)}</div>
   `).join('') : `<p style="color:var(--gray-600);font-size:13px;margin:0">Todos os contratos assinados.</p>`;
 
   document.getElementById('dashFinanceiro').innerHTML = `
@@ -883,9 +1306,22 @@ function renderAll(){
   renderFuncionarios();
   renderSupervisao();
   renderFinanceiro();
+  renderComercial();
 }
 
-loadState();
+/* ========================= INICIALIZAÇÃO ========================= */
+function initNavHistory(){
+  const initialTab = VALID_TABS.includes(location.hash.slice(1)) ? location.hash.slice(1) : 'dashboard';
+  showTab(initialTab);
+  history.replaceState({ tab: initialTab }, '', '#'+initialTab);
+}
+if(isAuthenticated()){
+  hideLogin();
+  loadState();
+  initNavHistory();
+}else{
+  showLogin();
+}
 </script>
 </body>
 </html>
